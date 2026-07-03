@@ -1,0 +1,14 @@
+========== Correlation Report ==========
+
+Total Records         : 55
+Unique UE IDs         : 1
+Unique SUCIs          : 1
+Repeated UE IDs       : 1
+Repeated SUCIs        : 1
+Correlation Score (%) : 100.00
+
+Interpretation:
+Direct subscriber identifiers are present in the dataset.
+Repeated IMSI/SUCI values allow registrations to be linked,
+resulting in a high correlation risk. Metadata minimization
+is recommended before sharing or storing this dataset.
