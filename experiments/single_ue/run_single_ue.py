@@ -3,14 +3,11 @@ from pathlib import Path
 from experiments.benchmark import benchmark
 from experiments.benchmark import load_config
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parents[2]
 
 config = load_config(
-    BASE_DIR / "systems" / "configs" / "multiple_ue.json"
+    BASE_DIR / "systems" / "configs" / "single_ue.json"
 )
-
-config["experiment_name"] = "10_ues"
-config["ue_count"] = 10
 
 benchmark(
     experiment_name=config["experiment_name"],

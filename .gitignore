@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+
+# Generated experiment data
+results/
+logging/raw_logs/
+logging/state/
+datasets/*.csv
+
+# Python
+__pycache__/
+*.pyc
