@@ -1,4 +1,119 @@
 
+
+========================================================
+             CAPSS PRIVACY SUMMARY REPORT
+========================================================
+
+
+PRIVACY SCORE ANALYSIS
+--------------------------------------------------------
+
+Source:
+privacy_score.py
+
+
+Average Privacy Score:
+
+5.00
+
+
+Highest Exposure Score:
+
+95
+
+
+
+
+
+
+
+
+========================================================
+
+PRIVACY RISK SCORE
+
+--------------------------------------------------------
+
+Source:
+privacy_score.py
+
+
+Average Risk Score:
+
+Not available
+
+
+Highest Risk Score:
+
+Not available
+
+
+Lowest Risk Score:
+
+Not available
+
+
+
+
+
+
+
+
+========================================================
+
+METADATA MINIMIZATION VERIFICATION
+
+--------------------------------------------------------
+
+Source:
+anonymized_registration_dataset.csv
+
+
+UE IDs:
+
+None
+
+
+SUCIs:
+
+None
+
+
+gNB IP Address:
+
+None
+
+
+Timestamp:
+
+None
+
+
+DNN:
+
+None
+
+
+S-NSSAI:
+
+None
+
+
+
+
+
+
+========================================================
+
+CORRELATION ANALYSIS
+
+--------------------------------------------------------
+
+Source:
+correlation_analyzer.py
+
+
+
 =========================================================
         CAPSS CORRELATION ANALYSIS REPORT
 =========================================================
@@ -271,3 +386,129 @@ tracking and behavioural profiling. Metadata minimization
 is strongly recommended before analytics sharing.
 
 =========================================================
+
+
+
+
+
+
+
+========================================================
+
+THREAT ANALYSIS
+
+--------------------------------------------------------
+
+Source:
+privacy_threat_analyzer.py
+
+
+=========================================================
+        CAPSS PRIVACY THREAT ASSESSMENT
+=========================================================
+
+Overall Privacy Risk : HIGH
+
+---------------------------------------------------------
+REGISTRATION BEHAVIOUR CLASSIFICATION
+---------------------------------------------------------
+Classification : Suspicious Behaviour
+Evidence Points : 1
+
+Registration Rate : 3.155 reg/min (189.27 reg/hour)
+Burst Registration Detected : False
+Max Consecutive Auth Failures : 0
+Lowest Auth Success Rate : 100.0% (imsi-999700000000019)
+
+Basis
+ • Moderate registration frequency: 3.15 reg/min
+
+=========================================================
+ATTACK STATUS : POSSIBLE ATTACK — EVIDENCE INSUFFICIENT TO CONFIRM
+=========================================================
+
+---------------------------------------------------------
+SECTION A — ACTIVE ATTACK INDICATORS
+(Only fire on frequency / burst / consecutive-failure evidence)
+---------------------------------------------------------
+
+No active attack indicators detected. Registration frequency, burst pattern, and authentication failure behaviour are within normal parameters.
+
+---------------------------------------------------------
+SECTION B — STRUCTURAL PRIVACY RISKS
+(Repeated-identifier exposure; confidence is damped when
+ behaviour is Normal, since repetition alone is not an attack)
+---------------------------------------------------------
+
+---------------------------------------------------------
+Threat 1
+
+Most Probable Privacy Threat : Identity Disclosure Risk
+
+Confidence : 68%
+Severity : MEDIUM
+Verdict : POSSIBLE ATTACK — EVIDENCE INSUFFICIENT TO CONFIRM
+Affected UE : Dataset-wide
+
+Reason
+ • Privacy score is critically low
+ • Identifiers are highly exposed
+ • Subscriber identity disclosure is possible
+
+Evidence
+ • Privacy Score = 5.00, Exposure Score = 95.00
+
+Recommendation : Strengthen identifier concealment (SUCI use, encryption)
+
+---------------------------------------------------------
+Threat 2
+
+Most Probable Privacy Threat : Metadata Inference Risk
+
+Confidence : 32%
+Severity : LOW
+Verdict : POSSIBLE ATTACK — EVIDENCE INSUFFICIENT TO CONFIRM
+Affected UE : Dataset-wide
+
+Reason
+ • Exposure Score = 95.00
+ • Privacy Score = 5.00
+ • Sensitive metadata remains visible
+
+Evidence
+ • Evidence-fusion confidence = 47%
+
+Recommendation : Minimize exposed/stored identifiers
+
+
+
+
+
+
+
+========================================================
+
+FINAL CAPSS PRIVACY OBSERVATION
+
+--------------------------------------------------------
+
+• Privacy score is obtained from the dedicated
+  privacy scoring module.
+
+
+• Metadata minimization status is verified
+  directly from anonymized dataset.
+
+
+• Correlation information is obtained from
+  correlation analyzer output.
+
+
+• CAPSS combines privacy, correlation and
+  threat intelligence to generate final
+  privacy assessment.
+
+
+
+========================================================
+

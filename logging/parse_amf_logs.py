@@ -8,7 +8,7 @@ import csv
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-LOG_FILE = os.path.join(BASE_DIR, "raw_logs", "amf.log")
+LOG_FILE = os.path.join(BASE_DIR, "raw_logs", "amf1.log")
 
 OUTPUT_DIR = os.path.join(BASE_DIR, "..", "datasets")
 os.makedirs(OUTPUT_DIR, exist_ok=True)

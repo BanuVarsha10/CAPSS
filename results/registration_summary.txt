@@ -2,663 +2,243 @@
 
 Registration #1
 ----------------------------------------
-Timestamp            : 07/01 13:26:51.010
+Timestamp            : 07/15 15:15:14.642
 Event                : Registration
 UE_ID                : imsi-999700000000001
 SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Failure
+Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #2
 ----------------------------------------
-Timestamp            : 07/01 13:28:25.645
+Timestamp            : 07/15 15:15:15.637
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000002
+SUCI                 : suci-0-999-70-0000-0-0-0000000002
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #3
 ----------------------------------------
-Timestamp            : 07/02 10:08:05.668
+Timestamp            : 07/15 15:15:16.647
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000003
+SUCI                 : suci-0-999-70-0000-0-0-0000000003
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #4
 ----------------------------------------
-Timestamp            : 07/02 10:14:58.939
+Timestamp            : 07/15 15:15:17.639
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000004
+SUCI                 : suci-0-999-70-0000-0-0-0000000004
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #5
 ----------------------------------------
-Timestamp            : 07/02 10:17:40.969
+Timestamp            : 07/15 15:15:18.640
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000005
+SUCI                 : suci-0-999-70-0000-0-0-0000000005
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #6
 ----------------------------------------
-Timestamp            : 07/02 10:19:34.069
+Timestamp            : 07/15 15:15:19.644
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000006
+SUCI                 : suci-0-999-70-0000-0-0-0000000006
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #7
 ----------------------------------------
-Timestamp            : 07/02 10:21:03.964
+Timestamp            : 07/15 15:15:20.647
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000007
+SUCI                 : suci-0-999-70-0000-0-0-0000000007
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #8
 ----------------------------------------
-Timestamp            : 07/02 10:21:58.451
+Timestamp            : 07/15 15:15:21.656
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000008
+SUCI                 : suci-0-999-70-0000-0-0-0000000008
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #9
 ----------------------------------------
-Timestamp            : 07/02 10:22:23.491
+Timestamp            : 07/15 15:15:22.649
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000009
+SUCI                 : suci-0-999-70-0000-0-0-0000000009
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #10
 ----------------------------------------
-Timestamp            : 07/02 10:22:48.432
+Timestamp            : 07/15 15:15:23.650
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000010
+SUCI                 : suci-0-999-70-0000-0-0-0000000010
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #11
 ----------------------------------------
-Timestamp            : 07/02 10:23:55.878
+Timestamp            : 07/15 15:15:24.651
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000011
+SUCI                 : suci-0-999-70-0000-0-0-0000000011
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #12
 ----------------------------------------
-Timestamp            : 07/02 10:24:31.796
+Timestamp            : 07/15 15:15:25.659
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000012
+SUCI                 : suci-0-999-70-0000-0-0-0000000012
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #13
 ----------------------------------------
-Timestamp            : 07/02 10:26:12.751
+Timestamp            : 07/15 15:15:26.653
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000013
+SUCI                 : suci-0-999-70-0000-0-0-0000000013
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #14
 ----------------------------------------
-Timestamp            : 07/02 10:29:46.678
+Timestamp            : 07/15 15:15:27.654
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000014
+SUCI                 : suci-0-999-70-0000-0-0-0000000014
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #15
 ----------------------------------------
-Timestamp            : 07/02 10:30:17.563
+Timestamp            : 07/15 15:15:28.665
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000015
+SUCI                 : suci-0-999-70-0000-0-0-0000000015
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #16
 ----------------------------------------
-Timestamp            : 07/02 10:30:38.473
+Timestamp            : 07/15 15:15:29.658
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000016
+SUCI                 : suci-0-999-70-0000-0-0-0000000016
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #17
 ----------------------------------------
-Timestamp            : 07/02 10:31:05.264
+Timestamp            : 07/15 15:15:30.658
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000017
+SUCI                 : suci-0-999-70-0000-0-0-0000000017
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #18
 ----------------------------------------
-Timestamp            : 07/02 10:31:59.072
+Timestamp            : 07/15 15:15:31.659
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000018
+SUCI                 : suci-0-999-70-0000-0-0-0000000018
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #19
 ----------------------------------------
-Timestamp            : 07/02 10:32:47.181
+Timestamp            : 07/15 15:15:32.662
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000019
+SUCI                 : suci-0-999-70-0000-0-0-0000000019
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 Registration #20
 ----------------------------------------
-Timestamp            : 07/02 10:33:31.400
+Timestamp            : 07/15 15:15:33.666
 Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
+UE_ID                : imsi-999700000000020
+SUCI                 : suci-0-999-70-0000-0-0-0000000020
 Authentication       : Success
 Registration Status  : Success
-gNB IP               : 192.168.56.102
+gNB IP               : 127.0.0.1
 DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #21
-----------------------------------------
-Timestamp            : 07/02 10:34:32.203
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #22
-----------------------------------------
-Timestamp            : 07/02 10:34:54.935
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #23
-----------------------------------------
-Timestamp            : 07/02 10:36:10.405
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #24
-----------------------------------------
-Timestamp            : 07/02 10:36:23.991
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #25
-----------------------------------------
-Timestamp            : 07/02 10:36:39.484
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #26
-----------------------------------------
-Timestamp            : 07/02 10:37:18.908
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #27
-----------------------------------------
-Timestamp            : 07/02 10:37:30.062
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #28
-----------------------------------------
-Timestamp            : 07/02 10:37:45.657
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #29
-----------------------------------------
-Timestamp            : 07/02 10:38:03.213
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #30
-----------------------------------------
-Timestamp            : 07/02 10:38:17.492
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #31
-----------------------------------------
-Timestamp            : 07/02 10:38:45.209
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #32
-----------------------------------------
-Timestamp            : 07/02 10:39:02.128
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #33
-----------------------------------------
-Timestamp            : 07/02 10:39:15.630
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #34
-----------------------------------------
-Timestamp            : 07/02 10:39:30.123
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #35
-----------------------------------------
-Timestamp            : 07/02 10:39:44.831
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #36
-----------------------------------------
-Timestamp            : 07/02 10:40:09.812
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #37
-----------------------------------------
-Timestamp            : 07/02 10:40:28.203
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #38
-----------------------------------------
-Timestamp            : 07/02 10:40:47.729
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #39
-----------------------------------------
-Timestamp            : 07/02 10:41:01.009
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #40
-----------------------------------------
-Timestamp            : 07/02 10:41:17.918
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #41
-----------------------------------------
-Timestamp            : 07/02 10:41:55.072
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #42
-----------------------------------------
-Timestamp            : 07/02 10:43:01.785
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #43
-----------------------------------------
-Timestamp            : 07/02 10:43:56.862
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #44
-----------------------------------------
-Timestamp            : 07/02 10:44:46.576
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #45
-----------------------------------------
-Timestamp            : 07/02 10:44:53.676
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #46
-----------------------------------------
-Timestamp            : 07/02 10:45:07.662
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #47
-----------------------------------------
-Timestamp            : 07/02 10:45:18.019
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #48
-----------------------------------------
-Timestamp            : 07/02 10:45:31.160
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #49
-----------------------------------------
-Timestamp            : 07/02 10:45:50.193
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #50
-----------------------------------------
-Timestamp            : 07/02 10:46:02.428
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #51
-----------------------------------------
-Timestamp            : 07/02 10:46:23.837
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #52
-----------------------------------------
-Timestamp            : 07/02 10:46:50.148
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #53
-----------------------------------------
-Timestamp            : 07/02 10:47:12.332
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #54
-----------------------------------------
-Timestamp            : 07/02 10:47:28.276
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
-
-Registration #55
-----------------------------------------
-Timestamp            : 07/02 10:48:13.987
-Event                : Registration
-UE_ID                : imsi-999700000000001
-SUCI                 : suci-0-999-70-0000-0-0-0000000001
-Authentication       : Success
-Registration Status  : Success
-gNB IP               : 192.168.56.102
-DNN                  : internet
-S_NSSAI              : SST:1 SD:0xffffff
+S_NSSAI              : SST:1 SD:0x1
 
 ==========================================
-Total Registrations : 55
+Total Registrations : 20

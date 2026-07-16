@@ -1,0 +1,14 @@
+Timestamp,Event,UE_ID,SUCI,Authentication_Result,Registration_Status,gNB_IP,DNN,S_NSSAI
+07/08 11:27:49.965,Registration,imsi-999700000000001,suci-0-999-70-0000-0-0-0000000001,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:28:00.205,Registration,imsi-999700000000002,suci-0-999-70-0000-0-0-0000000002,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:28:11.217,Registration,imsi-999700000000003,suci-0-999-70-0000-0-0-0000000003,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:28:22.234,Registration,imsi-999700000000004,suci-0-999-70-0000-0-0-0000000004,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:28:32.509,Registration,imsi-999700000000005,suci-0-999-70-0000-0-0-0000000005,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:28:43.516,Registration,imsi-999700000000006,suci-0-999-70-0000-0-0-0000000006,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:28:54.660,Registration,imsi-999700000000007,suci-0-999-70-0000-0-0-0000000007,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:29:04.799,Registration,imsi-999700000000008,suci-0-999-70-0000-0-0-0000000008,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:29:15.813,Registration,imsi-999700000000009,suci-0-999-70-0000-0-0-0000000009,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:29:26.829,Registration,imsi-999700000000010,suci-0-999-70-0000-0-0-0000000010,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:29:30.739,Registration,imsi-999700000000011,suci-0-999-70-0000-0-0-0000000011,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:29:45.803,Registration,imsi-999700000000012,suci-0-999-70-0000-0-0-0000000012,,Success,127.0.0.1,internet,SST:1 SD:0x1
+07/08 11:29:56.834,Registration,imsi-999700000000013,suci-0-999-70-0000-0-0-0000000013,,Success,127.0.0.1,internet,SST:1 SD:0x1

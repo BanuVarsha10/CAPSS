@@ -11,7 +11,7 @@ CSV_FILE = os.path.join(
     BASE_DIR,
     "..",
     "datasets",
-    "registration_dataset.csv"
+    "registration_dataset20.csv"
 )
 
 RESULTS_DIR = os.path.join(

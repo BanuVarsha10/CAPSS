@@ -1,339 +1,221 @@
 ========== Privacy Report ==========
 
-Total Records          : 55
-Average Privacy Score  : 4.91
-Highest Exposure Score : 100
+Total Records          : 20
+Average Privacy Score  : 5.00
+Highest Exposure Score : 95
 Lowest Exposure Score  : 95
+
+========== Privacy Risk Score (Exposure Only) ==========
+
+Average Privacy Risk Score : 95.00
+Highest Privacy Risk Score : 95
+Lowest Privacy Risk Score  : 95
+
+========== Overall Risk Score ==========
+
+Average Overall Risk Score : 28.50
+Highest Overall Risk Score : 28.5
+Lowest Overall Risk Score  : 28.5
 
 Individual Records
 
 Record 1
-Timestamp : 07/01 13:26:51.010
-UE_ID     : imsi-999700000000001
-Exposure  : 100
-Privacy   : 0
+Timestamp          : 07/15 15:15:14.642
+UE_ID              : imsi-999700000000001
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 2
-Timestamp : 07/01 13:28:25.645
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:15.637
+UE_ID              : imsi-999700000000002
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 3
-Timestamp : 07/02 10:08:05.668
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:16.647
+UE_ID              : imsi-999700000000003
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 4
-Timestamp : 07/02 10:14:58.939
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:17.639
+UE_ID              : imsi-999700000000004
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 5
-Timestamp : 07/02 10:17:40.969
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:18.640
+UE_ID              : imsi-999700000000005
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 6
-Timestamp : 07/02 10:19:34.069
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:19.644
+UE_ID              : imsi-999700000000006
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 7
-Timestamp : 07/02 10:21:03.964
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:20.647
+UE_ID              : imsi-999700000000007
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 8
-Timestamp : 07/02 10:21:58.451
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:21.656
+UE_ID              : imsi-999700000000008
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 9
-Timestamp : 07/02 10:22:23.491
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:22.649
+UE_ID              : imsi-999700000000009
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 10
-Timestamp : 07/02 10:22:48.432
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:23.650
+UE_ID              : imsi-999700000000010
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 11
-Timestamp : 07/02 10:23:55.878
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:24.651
+UE_ID              : imsi-999700000000011
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 12
-Timestamp : 07/02 10:24:31.796
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:25.659
+UE_ID              : imsi-999700000000012
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 13
-Timestamp : 07/02 10:26:12.751
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:26.653
+UE_ID              : imsi-999700000000013
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 14
-Timestamp : 07/02 10:29:46.678
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:27.654
+UE_ID              : imsi-999700000000014
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 15
-Timestamp : 07/02 10:30:17.563
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:28.665
+UE_ID              : imsi-999700000000015
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 16
-Timestamp : 07/02 10:30:38.473
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:29.658
+UE_ID              : imsi-999700000000016
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 17
-Timestamp : 07/02 10:31:05.264
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:30.658
+UE_ID              : imsi-999700000000017
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 18
-Timestamp : 07/02 10:31:59.072
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:31.659
+UE_ID              : imsi-999700000000018
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 19
-Timestamp : 07/02 10:32:47.181
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:32.662
+UE_ID              : imsi-999700000000019
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
 Record 20
-Timestamp : 07/02 10:33:31.400
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 21
-Timestamp : 07/02 10:34:32.203
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 22
-Timestamp : 07/02 10:34:54.935
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 23
-Timestamp : 07/02 10:36:10.405
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 24
-Timestamp : 07/02 10:36:23.991
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 25
-Timestamp : 07/02 10:36:39.484
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 26
-Timestamp : 07/02 10:37:18.908
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 27
-Timestamp : 07/02 10:37:30.062
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 28
-Timestamp : 07/02 10:37:45.657
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 29
-Timestamp : 07/02 10:38:03.213
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 30
-Timestamp : 07/02 10:38:17.492
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 31
-Timestamp : 07/02 10:38:45.209
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 32
-Timestamp : 07/02 10:39:02.128
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 33
-Timestamp : 07/02 10:39:15.630
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 34
-Timestamp : 07/02 10:39:30.123
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 35
-Timestamp : 07/02 10:39:44.831
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 36
-Timestamp : 07/02 10:40:09.812
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 37
-Timestamp : 07/02 10:40:28.203
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 38
-Timestamp : 07/02 10:40:47.729
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 39
-Timestamp : 07/02 10:41:01.009
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 40
-Timestamp : 07/02 10:41:17.918
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 41
-Timestamp : 07/02 10:41:55.072
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 42
-Timestamp : 07/02 10:43:01.785
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 43
-Timestamp : 07/02 10:43:56.862
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 44
-Timestamp : 07/02 10:44:46.576
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 45
-Timestamp : 07/02 10:44:53.676
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 46
-Timestamp : 07/02 10:45:07.662
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 47
-Timestamp : 07/02 10:45:18.019
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 48
-Timestamp : 07/02 10:45:31.160
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 49
-Timestamp : 07/02 10:45:50.193
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 50
-Timestamp : 07/02 10:46:02.428
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 51
-Timestamp : 07/02 10:46:23.837
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 52
-Timestamp : 07/02 10:46:50.148
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 53
-Timestamp : 07/02 10:47:12.332
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 54
-Timestamp : 07/02 10:47:28.276
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
-
-Record 55
-Timestamp : 07/02 10:48:13.987
-UE_ID     : imsi-999700000000001
-Exposure  : 95
-Privacy   : 5
+Timestamp          : 07/15 15:15:33.666
+UE_ID              : imsi-999700000000020
+Exposure           : 95
+Privacy            : 5
+Privacy_Risk_Score : 95
+Privacy_Risk_Level : CRITICAL
+Overall_Risk_Score : 28.5
+Overall_Risk_Level : LOW
 
