@@ -10,7 +10,7 @@ OUTPUT.mkdir(parents=True, exist_ok=True)
 
 template = SOURCE.read_text()
 
-for i in range(1, 11):
+for i in range(1, 21):
 
     imsi = f"999700000000{i:03d}"
 

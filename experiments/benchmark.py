@@ -79,13 +79,15 @@ def save_results(result_folder):
 
         BASE_DIR / "datasets" / "registration_dataset.csv",
 
+        BASE_DIR / "datasets" / "attack_dataset.csv",
+
         BASE_DIR / "results" / "registration_summary.txt",
 
         BASE_DIR / "results" / "metrics_report.txt",
 
         BASE_DIR / "logging" / "raw_logs" / "amf.log"
 
-    ]
+   ]
 
     for file in files:
 
@@ -228,11 +230,88 @@ def benchmark(
 
     # --------------------------------------------------
 
-    print("\nStart UE in another terminal:")
+    # --------------------------------------------------
+    if experiment_name == "duplicate_attack":
 
-    print(f"bash {SYSTEMS/'start_ue.sh'}")
+        print("\nStart Duplicate Attack:")
+        print(f"python3 {SYSTEMS/'start_duplicate_attack.py'}")
+        input("\nPress ENTER after attack completes...")
 
-    input("\nPress ENTER after registration succeeds...")
+    elif experiment_name == "registration_flood":
+
+        print("\nStart Registration Flood:")
+        print(f"python3 {SYSTEMS/'start_registration_flood.py'}")
+        input("\nPress ENTER after attack completes...")
+    
+    elif experiment_name == "invalid_subscriber":
+
+        print("\nStart Invalid Subscriber Attack:")
+        print(f"python3 {SYSTEMS/'start_invalid_subscriber.py'}")
+        input("\nPress ENTER after attack completes...")
+    
+    elif experiment_name == "mixed_traffic":
+
+        print()
+
+        print("=" * 60)
+
+        print("Mixed Traffic Scenario")
+
+        print("=" * 60)
+
+        # ------------------------------------------
+        # Step 1
+        # ------------------------------------------
+
+        print("\nSTEP 1")
+
+        print("Start 2 Normal UEs")
+
+        print(
+            f"python3 {SYSTEMS/'start_multiple_ues.py'} --count 2"
+        )
+
+        input("\nPress ENTER after normal traffic completes...")
+
+        # ------------------------------------------
+        # Step 2
+        # ------------------------------------------
+
+        print("\nSTEP 2")
+
+        print("Start Duplicate Registration Attack")
+
+        print(
+            f"python3 {SYSTEMS/'start_duplicate_attack.py'}"
+        )
+
+        input("\nPress ENTER after duplicate attack completes...")
+
+        # ------------------------------------------
+        # Step 3
+        # ------------------------------------------
+
+        print("\nSTEP 3")
+
+        print("Start Invalid Subscriber Attack")
+
+        print(
+            f"python3 {SYSTEMS/'start_invalid_subscriber.py'}"
+        )
+
+        input("\nPress ENTER after invalid subscriber attack completes...")
+
+    else:
+
+        print("\nStart UE(s) in another terminal:")
+        print(f"python3 {SYSTEMS/'start_multiple_ues.py'}")
+        input("\nPress ENTER after registrations succeed...")
+
+    if experiment_name != "mixed_traffic":
+
+        input("\nPress ENTER after all UE registrations succeed...")
+
+# --------------------------------------------------
 
     # --------------------------------------------------
 
@@ -261,7 +340,17 @@ def benchmark(
         "python3",
         str(LOGGING / "metrics_collector.py")
     ])
+    
+    # --------------------------------------------------
+    # Run CAPSS Pre-AMF Security Layer
+    # --------------------------------------------------
 
+    print("\nRunning CAPSS Pre-AMF Security Layer...")
+
+    run([
+        "python3",
+        str(BASE_DIR / "systems" / "attacks" / "attack_runner.py")
+    ])
     # --------------------------------------------------
 
     save_results(result_folder)

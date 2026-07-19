@@ -78,12 +78,15 @@ with open(LOG_FILE, "r", encoding="utf-8", errors="ignore") as file:
             ts = timestamp_re.search(line)
 
             current = {
+                "Request_ID": "",
                 "Timestamp": ts.group(1) if ts else "",
                 "Event": "Registration",
                 "UE_ID": "",
                 "SUCI": "",
                 "Authentication_Result": "",
                 "Registration_Status": "",
+                "Registration_Type": "INITIAL",
+                "Cause_Code": "UNKNOWN",
                 "gNB_IP": last_gnb_ip,
                 "DNN": "",
                 "S_NSSAI": ""
@@ -117,17 +120,30 @@ with open(LOG_FILE, "r", encoding="utf-8", errors="ignore") as file:
         # -------------------------------
 
         if "Authentication failure" in line:
-            current["Authentication_Result"] = "Failure"
+
+                current["Authentication_Result"] = "Failure"
+
+                current["Cause_Code"] = "AUTH_FAILURE"
 
         if "Authentication successful" in line:
-            current["Authentication_Result"] = "Success"
+
+                current["Authentication_Result"] = "Success"
+
+                current["Cause_Code"] = "SUCCESS"
 
         # -------------------------------
         # Registration Complete
         # -------------------------------
 
         if "Registration complete" in line:
+
             current["Registration_Status"] = "Success"
+
+            if current["Authentication_Result"] == "":
+                current["Authentication_Result"] = "Success"
+
+            if current["Cause_Code"] == "UNKNOWN":
+                current["Cause_Code"] = "SUCCESS"
 
         # -------------------------------
         # DNN
@@ -152,7 +168,55 @@ with open(LOG_FILE, "r", encoding="utf-8", errors="ignore") as file:
 # --------------------------------------------------
 
 if current is not None:
+
+    if current["Registration_Status"] == "":
+        current["Registration_Status"] = "Failure"
+
     records.append(current)
+
+# --------------------------------------------------
+# Fill Default Successful Values
+# --------------------------------------------------
+
+for record in records:
+
+    if record["Authentication_Result"] == "":
+        record["Authentication_Result"] = "Success"
+
+    if record["Registration_Status"] == "":
+        record["Registration_Status"] = "Success"
+
+    if record["Cause_Code"] == "UNKNOWN":
+        record["Cause_Code"] = "SUCCESS"
+
+
+# --------------------------------------------------
+# Handle Unknown Subscribers
+# --------------------------------------------------
+
+for record in records:
+
+    # If IMSI was never resolved but SUCI exists,
+    # preserve the request by using the SUCI as the identifier.
+    if record["UE_ID"] == "" and record["SUCI"] != "":
+
+        record["UE_ID"] = record["SUCI"]
+
+    # Registration failed because subscriber was unknown
+    if record["Registration_Status"] == "Failure":
+
+        record["Authentication_Result"] = "Failure"
+
+        if record["Cause_Code"] == "SUCCESS":
+
+            record["Cause_Code"] = "UNKNOWN_SUBSCRIBER"
+# --------------------------------------------------
+# Assign Request IDs
+# --------------------------------------------------
+
+for index, record in enumerate(records, start=1):
+
+    record["Request_ID"] = f"REQ{index:06d}"
 
 # --------------------------------------------------
 # Write CSV
@@ -161,17 +225,32 @@ if current is not None:
 with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as csvfile:
 
     fieldnames = [
-        "Timestamp",
-        "Event",
-        "UE_ID",
-        "SUCI",
-        "Authentication_Result",
-        "Registration_Status",
-        "gNB_IP",
-        "DNN",
-        "S_NSSAI"
-    ]
 
+        "Request_ID",
+
+        "Timestamp",
+
+        "Event",
+
+        "UE_ID",
+
+        "SUCI",
+
+        "Authentication_Result",
+
+        "Registration_Status",
+
+        "Registration_Type",
+
+        "Cause_Code",
+
+        "gNB_IP",
+
+        "DNN",
+
+        "S_NSSAI",
+
+    ]
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
     writer.writeheader()
