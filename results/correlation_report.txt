@@ -1,0 +1,273 @@
+
+=========================================================
+        CAPSS CORRELATION ANALYSIS REPORT
+=========================================================
+
+DATASET INFORMATION
+---------------------------------------------------------
+Total Registration Records     : 20
+
+Unique UE IDs                  : 20
+
+Unique SUCIs                   : 20
+
+Unique gNB IPs                 : 1
+
+Unique DNNs                    : 1
+
+Unique S-NSSAIs                : 1
+
+---------------------------------------------------------
+
+REGISTRATION STATISTICS
+---------------------------------------------------------
+Average Registrations / UE     : 1.00
+
+Maximum Registrations / UE     : 1
+
+Most Active UE                 : imsi-999700000000001
+
+Most Active SUCI               : suci-0-999-70-0000-0-0-0000000001
+
+Registration Duration (sec)    : 19.02
+
+Average Registration Interval  : 0.00 sec (per UE, avg)
+
+Minimum Registration Interval  : 0.00 sec (dataset-wide)
+
+Maximum Registration Interval  : 0.00 sec (dataset-wide)
+
+Global Baseline Interval       : 1.00 sec (dataset-wide expected)
+
+---------------------------------------------------------
+
+UE REGISTRATION DISTRIBUTION (GINI COEFFICIENT) (NEW)
+---------------------------------------------------------
+This catches cases the average alone misses: e.g. one UE
+with 90 registrations vs. two UEs with 1 each can have the
+same average as three UEs with ~30 each, but very different
+concentration of tracking risk.
+
+UE Registration Gini Coeff.    : 0.000 (0 = evenly spread, 1 = concentrated on one UE)
+
+Contribution to Score          : 0.00 / 10 points
+
+---------------------------------------------------------
+
+IDENTIFIER DIVERSITY, REPETITION & ENTROPY METRICS (NEW)
+---------------------------------------------------------
+Replaces plain YES/NO repeat flags with continuous,
+dataset-size-aware metrics used to weight the Correlation
+Score, so results are comparable across datasets of
+different sizes and reuse intensity.
+
+Diversity Ratio            = unique / total (how much of
+                              the field is distinct values)
+Record Repetition Ratio     = 1 - Diversity Ratio (fraction
+                              of RECORDS reusing a prior
+                              value)
+Distinct Repetition Ratio   = (# distinct values that
+                              repeat) / unique (fraction of
+                              DISTINCT VALUES that show
+                              reuse at all, e.g. "2 out of
+                              10 UEs repeated = 20%")
+Entropy / Norm. Entropy     = Shannon entropy of the value
+                              distribution, normalized 0-1
+                              against the theoretical
+                              maximum for this many unique
+                              values (1 = perfectly even,
+                              0 = fully concentrated)
+Concentration               = 1 - Norm. Entropy
+Linkability Index           = (Record Repetition Ratio +
+                              Concentration) / 2 -> the 0-1
+                              score actually used to weight
+                              this field in the Correlation
+                              Score
+
+UE_ID:
+  Total=20  Unique=20  Repeated Distinct Values=0
+  Diversity Ratio=1.000  Record Repetition Ratio=0.000
+  Distinct Repetition Ratio=0.000  Entropy=4.322 bits
+  Norm. Entropy=1.000  Concentration=0.000
+  Linkability Index=0.000
+
+SUCI:
+  Total=20  Unique=20  Repeated Distinct Values=0
+  Diversity Ratio=1.000  Record Repetition Ratio=0.000
+  Distinct Repetition Ratio=0.000  Entropy=4.322 bits
+  Norm. Entropy=1.000  Concentration=0.000
+  Linkability Index=0.000
+
+gNB_IP:
+  Total=20  Unique=1  Repeated Distinct Values=1
+  Diversity Ratio=0.050  Record Repetition Ratio=0.950
+  Distinct Repetition Ratio=1.000  Entropy=0.000 bits
+  Norm. Entropy=0.000  Concentration=1.000
+  Linkability Index=0.975
+
+DNN:
+  Total=20  Unique=1  Repeated Distinct Values=1
+  Diversity Ratio=0.050  Record Repetition Ratio=0.950
+  Distinct Repetition Ratio=1.000  Entropy=0.000 bits
+  Norm. Entropy=0.000  Concentration=1.000
+  Linkability Index=0.975
+
+S_NSSAI:
+  Total=20  Unique=1  Repeated Distinct Values=1
+  Diversity Ratio=0.050  Record Repetition Ratio=0.950
+  Distinct Repetition Ratio=1.000  Entropy=0.000 bits
+  Norm. Entropy=0.000  Concentration=1.000
+  Linkability Index=0.975
+
+---------------------------------------------------------
+
+DATASET SCALE FACTOR (NEW)
+---------------------------------------------------------
+Unique UEs Observed            : 20
+
+Dataset Scale Ratio            : 0.667 (0-1, rises with unique_ue count)
+
+Scale Contribution to Score    : 10.00 / 15 points
+
+Note: this ratio is strictly increasing in the number of
+unique UEs observed, so two datasets that differ only in
+UE count (e.g. 10 vs 20 UEs) will always produce different
+Correlation Scores, even if every ratio-based factor above
+is identical between them.
+
+---------------------------------------------------------
+
+BURST REGISTRATION ANALYSIS
+---------------------------------------------------------
+Burst Registration Detected    : NO
+
+Number of Bursty UEs           : 0
+
+Most Bursty UE                 : N/A
+
+---------------------------------------------------------
+
+FAILURE / AUTHENTICATION HISTORY
+---------------------------------------------------------
+Total Registration Failures    : 0
+
+UEs With Registration Failures : 0
+
+Most Failed UE                 : N/A
+
+Total Auth Failures            : 0
+
+Total Auth Successes           : 20
+
+UEs With Auth Failures         : 0
+
+Most Auth-Failed UE            : N/A
+
+Lowest Success Rate UE         : imsi-999700000000019 (100.0% success)
+
+---------------------------------------------------------
+
+PER-UE FAILURE / AUTH BREAKDOWN
+---------------------------------------------------------
+No registration or authentication failures recorded.
+
+---------------------------------------------------------
+
+FAILURE SEQUENCES (Chronological)
+---------------------------------------------------------
+No UE experienced an authentication failure.
+
+---------------------------------------------------------
+
+LOCATION HISTORY (gNB PER UE)
+---------------------------------------------------------
+Most Mobile UE                 : imsi-999700000000001
+
+Max Unique gNBs (single UE)    : 1
+
+UEs With Repeated Location     : 0
+
+Location Correlation Risk      : LOW
+
+---------------------------------------------------------
+
+CORRELATION METRICS
+---------------------------------------------------------
+Correlation Score              : 35.30 %
+
+Correlation Risk Level         : LOW
+
+Correlation Confidence         : 75 %
+
+Sample-Size-Adjusted Confidence: 78.18 % (based on 20 records, NEW - additional metric, does not replace the above)
+
+---------------------------------------------------------
+
+CORRELATION FACTORS
+---------------------------------------------------------
+Repeated UE IDs                : NO  (linkability index 0.000)
+
+Repeated SUCIs                  : NO  (linkability index 0.000)
+
+Repeated gNB                    : YES  (linkability index 0.975)
+
+Repeated DNN                    : YES  (linkability index 0.975)
+
+Repeated S-NSSAI                : YES  (linkability index 0.975)
+
+Dataset Scale (Unique UEs)     : 20 UEs -> 0.667 ratio
+
+UE Distribution Gini            : 0.000
+
+Historical Registrations       : NO
+
+Burst Registration Pattern     : NO
+
+Previous Failures Present      : NO
+
+Auth History Failures Present  : NO
+
+Location History Correlation   : NO
+
+---------------------------------------------------------
+
+POTENTIAL PRIVACY RISKS
+---------------------------------------------------------
+Linkability Risk               : LOW
+
+Subscriber Tracking Risk       : LOW
+
+Behavioural Profiling Risk     : HIGH
+
+Metadata Correlation Risk      : HIGH
+
+Location Correlation Risk      : LOW
+
+---------------------------------------------------------
+
+CORRELATION OBSERVATIONS
+---------------------------------------------------------
+• Registrations repeatedly originate from the same gNB (distinct repetition ratio 1.00, linkability index 0.97).
+• DNN reuse enables service usage correlation (linkability index 0.97).
+• S-NSSAI reuse reveals slice association patterns (linkability index 0.97).
+• 20 unique UE(s) observed in this dataset, contributing 10.00 of 15 points to the Correlation Score purely from population scale.
+
+---------------------------------------------------------
+
+BEHAVIOUR TIMELINE (Repeat UEs Only)
+---------------------------------------------------------
+No UE registered more than once.
+
+
+---------------------------------------------------------
+
+INTERPRETATION
+---------------------------------------------------------
+Direct subscriber identifiers are present in the dataset.
+Repeated IMSI and SUCI values enable strong correlation
+between multiple registration sessions. The dataset exhibits
+a high probability of long-term subscriber linkability,
+tracking and behavioural profiling. Metadata minimization
+is strongly recommended before analytics sharing.
+
+=========================================================
