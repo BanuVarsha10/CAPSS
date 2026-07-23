@@ -1,0 +1,8 @@
+Baseline,Privacy Improvement,Leakage Reduction (%),Correlation Reduction (%),Linkability Reduction (%),Extra Processing Time (ms)
+Fixed_ECIES,9.18,27.54,15.92,22.88,4.0
+Fixed_ML-KEM,-3.2,17.24,15.92,13.99,2.0
+Fixed_IBE,9.18,27.54,15.92,22.88,1.0
+Fixed_GroupSignature,-3.2,-15.59,15.92,-11.76,0.0
+Fixed_DynamicPseudonym,9.18,-15.59,15.92,-11.76,1.0
+Fixed_AdaptivePadding,-3.2,-15.59,15.92,-11.76,1.5
+Fixed_ZKP,-3.2,17.24,15.92,13.99,-0.5

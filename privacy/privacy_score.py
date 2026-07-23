@@ -1,4 +1,5 @@
 import os
+import re
 import csv
 from collections import Counter
 
@@ -8,17 +9,27 @@ from collections import Counter
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# CHANGED: now reads the merged dataset produced by security_context.py
+# (Phase 2 of the integration), which carries Attack_Detected /
+# Attack_Type / Decision / Severity / Confidence alongside the original
+# registration fields. Previously this pointed at
+# datasets/registration_dataset20.csv, which has none of those columns.
 CSV_FILE = os.path.join(
     BASE_DIR,
     "..",
     "datasets",
-    "registration_dataset20.csv"
+    "privacy_test.csv" 
 )
-
+ 
 RESULTS_DIR = os.path.join(BASE_DIR, "..", "results")
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 REPORT_FILE = os.path.join(RESULTS_DIR, "privacy_report.txt")
+
+# Report produced by correlation_analyzer.py. Read-only here - this
+# file never generates or recalculates a correlation score, it only
+# parses the one correlation_analyzer.py already wrote out.
+CORRELATION_REPORT_FILE = os.path.join(RESULTS_DIR, "correlation_report.txt")
 
 # --------------------------------------------------
 # Maximum Possible Exposure
@@ -53,12 +64,44 @@ MAX_WEIGHTS = {
 # These weights are a documented design choice (they sum to 100)
 # so the final Overall_Risk_Score stays on a 0-100 scale like the
 # existing Privacy/Exposure/Privacy_Risk_Score.
+#
+# UPDATED (round 2): "Attack_Indicators" is spent by
+# attack_behaviour_component() using the Systems team's real
+# Attack_Detected / Severity / Confidence / Decision fields, instead
+# of the old repeat-count-plus-failure proxy.
+#
+# "Repeated_Registrations" is renamed to "Behaviour_Risk" - it was
+# never attack detection, it's a behavioural privacy signal (the
+# same UE showing up repeatedly), so the name now says what it is.
+#
+# "Failed_Registrations" is KEPT (not removed, despite feedback
+# suggesting it's duplicate logic). Registration/auth failure and
+# Systems' Attack_Detected are different signals: a registration can
+# fail for ordinary reasons (wrong DNN, expired credential, network
+# issue) with no attack flag at all, and an attack can be detected on
+# a record where registration succeeded (e.g. reconnaissance, a
+# replay that still completes). Its weight is reduced rather than
+# zeroed, since there is now some overlap now that real attack data
+# exists.
+#
+# UPDATED (round 3): "Behaviour_Correlation" is no longer waiting on
+# a per-record Correlation_Score column. correlation_analyzer.py only
+# ever produces one Correlation Score for the whole dataset (see its
+# report), not one per registration, so this component now applies
+# that single dataset-wide value identically to every record - a
+# global "this registration environment has high/low linkability
+# risk" context factor, not a per-record differentiator. See
+# get_overall_correlation_score() / correlation_component() below.
+#
+# Weights were rebalanced (not copied from any single suggestion)
+# to make room for Behaviour_Correlation while still summing to 100.
 
 RISK_WEIGHTS = {
-    "Repeated_Registrations": 30,
-    "Failed_Registrations": 25,
-    "Metadata_Exposure": 30,
-    "Attack_Indicators": 15
+    "Metadata_Exposure": 25,
+    "Behaviour_Risk": 20,          # renamed from Repeated_Registrations
+    "Failed_Registrations": 15,    # kept, weight reduced
+    "Behaviour_Correlation": 15,   # dataset-wide correlation score, applied globally
+    "Attack_Indicators": 25
 }
 
 # Registration/auth outcome values used consistently with the
@@ -73,6 +116,32 @@ DNN_PLACEHOLDER_VALUES = {"DEFAULT_DNN"}
 NSSAI_PLACEHOLDER_VALUES = {"DEFAULT_SLICE"}
 
 # --------------------------------------------------
+# Attack Context Lookup Tables (NEW)
+# --------------------------------------------------
+# Used only by attack_behaviour_component() below. These convert
+# the Systems team's Severity / Decision strings into numbers.
+# Risk_Score from attack.csv is intentionally NOT used anywhere in
+# this file - it is always 0 in the current dataset and would
+# contribute nothing but dead weight to the score.
+
+SEVERITY_RANK = {
+    "NONE": 0,
+    "NORMAL": 0,
+    "LOW": 1,
+    "SUSPICIOUS": 2,
+    "MEDIUM": 2,
+    "HIGH": 3,
+    "CRITICAL": 4,
+}
+
+DECISION_MULTIPLIER = {
+    "BLOCK": 1.0,
+    "TAG": 0.6,
+    "ALLOW": 0.3,
+    "UNKNOWN": 0.5,
+}
+
+# --------------------------------------------------
 # Safe field access (boundary condition: short/malformed rows)
 # --------------------------------------------------
 # csv.DictReader fills missing trailing columns with None rather
@@ -83,6 +152,41 @@ NSSAI_PLACEHOLDER_VALUES = {"DEFAULT_SLICE"}
 def field(row, key):
     value = row.get(key)
     return value.strip() if value else ""
+
+# --------------------------------------------------
+# Overall Correlation Score (dataset-wide, from correlation_analyzer.py)
+# --------------------------------------------------
+# correlation_analyzer.py computes exactly one Correlation Score for
+# the entire dataset (see its "CORRELATION METRICS" section) and only
+# writes it into correlation_report.txt - it does not emit a
+# per-record column. So instead of waiting on that column, this reads
+# the single dataset-wide value straight out of the report line:
+#   "Correlation Score              : 62.00 %"
+# and every record in this run is given that same value (see
+# correlation_component() below). Returns None - not 0 - when the
+# report is missing or the line can't be found, so callers can tell
+# "no data yet" apart from "a genuine 0% correlation score".
+
+CORRELATION_SCORE_PATTERN = re.compile(r"Correlation Score\s*:\s*([\d.]+)\s*%")
+
+def get_overall_correlation_score(report_path):
+    if not os.path.exists(report_path):
+        return None
+
+    try:
+        with open(report_path, "r", encoding="utf-8") as f:
+            content = f.read()
+    except OSError:
+        return None
+
+    match = CORRELATION_SCORE_PATTERN.search(content)
+    if not match:
+        return None
+
+    try:
+        return float(match.group(1))
+    except ValueError:
+        return None
 
 # --------------------------------------------------
 # Exposure Calculation Functions
@@ -160,14 +264,33 @@ def nssai_exposure(value):
 # Overall Risk Score - Component Functions
 # --------------------------------------------------
 
-def repeated_registrations_component(ue_id, ue_id_counts):
-    # Same UE reappearing across the dataset is the "repeated
-    # registrations" signal. Each repeat beyond the first adds
-    # points, capped at the weight ceiling.
+def behaviour_risk_component(ue_id, ue_id_counts):
+    # RENAMED from repeated_registrations_component(). Same UE
+    # reappearing across the dataset is a behavioural privacy
+    # signal, not attack detection - each repeat beyond the first
+    # adds points, capped at the weight ceiling.
     count = ue_id_counts.get(ue_id, 0)
     if count <= 1:
         return 0
-    return min(RISK_WEIGHTS["Repeated_Registrations"], (count - 1) * 6)
+    return min(RISK_WEIGHTS["Behaviour_Risk"], (count - 1) * 6)
+
+def correlation_component(overall_correlation_score):
+    # Applies correlation_analyzer.py's dataset-wide Correlation
+    # Score (parsed from its report by get_overall_correlation_score()
+    # below) as a GLOBAL context factor - the same value is added to
+    # every record's Overall_Risk_Score in this run. It intentionally
+    # does not differentiate between records: correlation_analyzer.py
+    # only ever produces one score for the whole dataset, so this
+    # component tells the Privacy module "this registration
+    # environment has high/low linkability risk" rather than "this
+    # specific record is more/less linkable than others".
+    # Contributes 0 if the report is missing or unparseable.
+    if overall_correlation_score is None:
+        return 0
+
+    score = max(0.0, min(overall_correlation_score, 100.0))
+
+    return round((score / 100) * RISK_WEIGHTS["Behaviour_Correlation"], 2)
 
 def failed_registrations_component(registration_status, authentication_result):
 
@@ -190,29 +313,37 @@ def metadata_exposure_component(exposure_value):
     # its share of the overall Risk Score.
     return round(exposure_value * (RISK_WEIGHTS["Metadata_Exposure"] / 100), 2)
 
-def attack_indicators_component(ue_id, ue_id_counts, registration_status, authentication_result):
-    # A simple proxy for "attack indicators": repetition alone
-    # is a privacy risk, but repetition COMBINED with a failure
-    # is treated as a stronger signal of active probing/misuse.
-    count = ue_id_counts.get(ue_id, 0)
-    reg = registration_status.strip().upper()
-    auth = authentication_result.strip().upper()
+def attack_behaviour_component(attack_detected, severity, confidence_val, decision):
+    # REPLACES the old attack_indicators_component() proxy (which
+    # guessed at attacks from UE repeat-count + failure). Now that
+    # privacy_dataset.csv carries the Systems team's own attack
+    # verdict, this reads it directly instead of re-deriving it:
+    #
+    #   - No attack detected on this record -> contributes 0.
+    #   - Otherwise, blend how severe the attack is (Severity,
+    #     mapped 0-1 via SEVERITY_RANK) with how confident the
+    #     detector was (Confidence, clamped 0-1), then scale by
+    #     how strongly Systems acted on it (Decision: BLOCK hits
+    #     hardest, TAG partially, ALLOW lightly).
+    #   - Result is scaled into the same 15-point budget the old
+    #     "Attack_Indicators" weight already used, so the overall
+    #     0-100 scale of Overall_Risk_Score is unchanged.
+    #
+    # Risk_Score from attack.csv is deliberately not used here -
+    # it is always 0 in the current dataset.
 
-    # Empty registration = failure
-    reg_failed = (reg == "") or (reg not in SUCCESS_KEYWORDS)
-
-    # Empty authentication = not a failure
-    auth_failed = (auth != "") and (auth not in SUCCESS_KEYWORDS)
-
-    has_failure = reg_failed or auth_failed
-
-    if not has_failure:
+    if not attack_detected:
         return 0
-    if count >= 5:
-        return RISK_WEIGHTS["Attack_Indicators"]
-    elif count >= 3:
-        return round(RISK_WEIGHTS["Attack_Indicators"] * 0.5, 2)
-    return 0
+
+    severity_ratio = SEVERITY_RANK.get(severity, 0) / 4
+
+    confidence_clamped = max(0.0, min(confidence_val, 1.0))
+
+    decision_multiplier = DECISION_MULTIPLIER.get(decision, 0.5)
+
+    blended = (severity_ratio * 0.5 + confidence_clamped * 0.5) * decision_multiplier
+
+    return round(blended * RISK_WEIGHTS["Attack_Indicators"], 2)
 
 def risk_level_from_score(score):
     if score >= 80:
@@ -236,9 +367,15 @@ with open(CSV_FILE, "r", encoding="utf-8") as file:
     rows = list(reader)
 
 # UE_ID repeat counts across the whole dataset - needed for the
-# "Repeated Registrations" and "Attack Indicators" components of
-# Overall_Risk_Score.
+# "Behaviour_Risk" component of Overall_Risk_Score.
 ue_id_counts = Counter(field(row, "UE_ID") for row in rows)
+
+# Dataset-wide Correlation Score from correlation_analyzer.py's
+# report - computed once here (not per-row) since it is the same
+# global value for every record in this run. None if the report
+# hasn't been generated yet; correlation_component() treats that
+# as "contribute 0" rather than erroring.
+overall_correlation_score = get_overall_correlation_score(CORRELATION_REPORT_FILE)
 
 for row in rows:
 
@@ -268,25 +405,47 @@ for row in rows:
     privacy_risk_level = risk_level_from_score(privacy_risk_score)
 
     # ----------------------------------------------
-    # Overall_Risk_Score (renamed from Risk_Score - same
-    # calculation as before: repeats + failures + metadata
-    # exposure + attack indicators)
+    # Attack Context Fields (NEW)
+    # ----------------------------------------------
+    # Read straight from privacy_dataset.csv - not recalculated.
+    # Risk_Score is intentionally not read/used (always 0).
+
+    attack_detected_raw = field(row, "Attack_Detected").upper()
+    attack_detected = attack_detected_raw in {"TRUE", "1", "YES"}
+
+    attack_type = field(row, "Attack_Type").upper() or "NONE"
+
+    decision = field(row, "Decision").upper() or "UNKNOWN"
+
+    severity = field(row, "Severity").upper() or "NONE"
+
+    confidence_raw = field(row, "Confidence")
+    try:
+        confidence_val = float(confidence_raw) if confidence_raw else 0.0
+    except ValueError:
+        confidence_val = 0.0
+
+    # ----------------------------------------------
+    # Overall_Risk_Score (renamed from Risk_Score - now:
+    # metadata exposure + behaviour risk + failed registrations
+    # + behaviour correlation + attack behaviour)
     # ----------------------------------------------
 
     ue_id_stripped = field(row, "UE_ID")
 
     overall_risk_score = 0
-    overall_risk_score += repeated_registrations_component(ue_id_stripped, ue_id_counts)
+    overall_risk_score += metadata_exposure_component(exposure)
+    overall_risk_score += behaviour_risk_component(ue_id_stripped, ue_id_counts)
     overall_risk_score += failed_registrations_component(
         field(row, "Registration_Status"),
         field(row, "Authentication_Result")
     )
-    overall_risk_score += metadata_exposure_component(exposure)
-    overall_risk_score += attack_indicators_component(
-        ue_id_stripped,
-        ue_id_counts,
-        field(row, "Registration_Status"),
-        field(row, "Authentication_Result")
+    overall_risk_score += correlation_component(overall_correlation_score)
+    overall_risk_score += attack_behaviour_component(
+        attack_detected,
+        severity,
+        confidence_val,
+        decision
     )
 
     overall_risk_score = min(100, round(overall_risk_score, 2))
@@ -300,7 +459,12 @@ for row in rows:
         "Privacy_Risk_Score": privacy_risk_score,
         "Privacy_Risk_Level": privacy_risk_level,
         "Overall_Risk_Score": overall_risk_score,
-        "Overall_Risk_Level": overall_risk_level
+        "Overall_Risk_Level": overall_risk_level,
+        "Attack_Detected": attack_detected,
+        "Attack_Type": attack_type,
+        "Decision": decision,
+        "Severity": severity,
+        "Confidence": confidence_val
     })
 
 # --------------------------------------------------
@@ -367,7 +531,12 @@ for i,record in enumerate(scores,1):
         f"Privacy_Risk_Score={record['Privacy_Risk_Score']} "
         f"Privacy_Risk_Level={record['Privacy_Risk_Level']} "
         f"Overall_Risk_Score={record['Overall_Risk_Score']} "
-        f"Overall_Risk_Level={record['Overall_Risk_Level']}"
+        f"Overall_Risk_Level={record['Overall_Risk_Level']} "
+        f"Attack_Detected={record['Attack_Detected']} "
+        f"Attack_Type={record['Attack_Type']} "
+        f"Decision={record['Decision']} "
+        f"Severity={record['Severity']} "
+        f"Confidence={record['Confidence']}"
     )
 
 # --------------------------------------------------
@@ -408,7 +577,12 @@ with open(REPORT_FILE,"w",encoding="utf-8") as report:
             f"Privacy_Risk_Score : {record['Privacy_Risk_Score']}\n"
             f"Privacy_Risk_Level : {record['Privacy_Risk_Level']}\n"
             f"Overall_Risk_Score : {record['Overall_Risk_Score']}\n"
-            f"Overall_Risk_Level : {record['Overall_Risk_Level']}\n\n"
+            f"Overall_Risk_Level : {record['Overall_Risk_Level']}\n"
+            f"Attack_Detected    : {record['Attack_Detected']}\n"
+            f"Attack_Type        : {record['Attack_Type']}\n"
+            f"Decision           : {record['Decision']}\n"
+            f"Severity           : {record['Severity']}\n"
+            f"Confidence         : {record['Confidence']}\n\n"
         )
 
 print("\nReport saved successfully!")

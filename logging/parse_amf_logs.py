@@ -8,12 +8,12 @@ import csv
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-LOG_FILE = os.path.join(BASE_DIR, "raw_logs", "amf1.log")
+LOG_FILE = os.path.join(BASE_DIR, "raw_logs", "amf.log")
 
 OUTPUT_DIR = os.path.join(BASE_DIR, "..", "datasets")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-OUTPUT_FILE = os.path.join(OUTPUT_DIR, "registration_dataset.csv")
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "registration_dataset4.csv")
 
 # --------------------------------------------------
 # Regular Expressions
@@ -31,6 +31,8 @@ dnn_re = re.compile(r"DNN\[([^\]]+)\]")
 
 snssai_re = re.compile(r"S_NSSAI\[([^\]]+)\]")
 
+cause_re = re.compile(r"[Cc]ause[\[\(]([^\]\)]+)[\]\)]")
+
 # --------------------------------------------------
 # Variables
 # --------------------------------------------------
@@ -40,6 +42,8 @@ records = []
 current = None
 
 last_gnb_ip = ""
+
+request_counter = 0
 
 # --------------------------------------------------
 # Read Log
@@ -72,13 +76,17 @@ with open(LOG_FILE, "r", encoding="utf-8", errors="ignore") as file:
 
             ts = timestamp_re.search(line)
 
+            request_counter += 1
+
             current = {
+                "Request_ID": f"REQ{request_counter:06d}",
                 "Timestamp": ts.group(1) if ts else "",
                 "Event": "Registration",
                 "UE_ID": "",
                 "SUCI": "",
                 "Authentication_Result": "",
                 "Registration_Status": "",
+                "Cause_Code": "",
                 "gNB_IP": last_gnb_ip,
                 "DNN": "",
                 "S_NSSAI": ""
@@ -123,6 +131,16 @@ with open(LOG_FILE, "r", encoding="utf-8", errors="ignore") as file:
 
         if "Registration complete" in line:
             current["Registration_Status"] = "Success"
+            current["Cause_Code"] = "SUCCESS"
+
+        # -------------------------------
+        # Cause Code (explicit cause in log line, overrides default)
+        # -------------------------------
+
+        cause = cause_re.search(line)
+
+        if cause:
+            current["Cause_Code"] = cause.group(1)
 
         # -------------------------------
         # DNN
@@ -150,18 +168,31 @@ if current is not None:
     records.append(current)
 
 # --------------------------------------------------
+# Fill missing Cause_Code for incomplete/failed registrations
+# --------------------------------------------------
+
+for r in records:
+    if not r["Cause_Code"]:
+        if r["Authentication_Result"] == "Failure":
+            r["Cause_Code"] = "AUTH_FAILURE"
+        else:
+            r["Cause_Code"] = "UNKNOWN"
+
+# --------------------------------------------------
 # Write CSV
 # --------------------------------------------------
 
 with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as csvfile:
 
     fieldnames = [
+        "Request_ID",
         "Timestamp",
         "Event",
         "UE_ID",
         "SUCI",
         "Authentication_Result",
         "Registration_Status",
+        "Cause_Code",
         "gNB_IP",
         "DNN",
         "S_NSSAI"

@@ -1,0 +1,10 @@
+Request_ID,Timestamp,Event,UE_ID,SUCI,Authentication_Result,Registration_Status,Cause_Code,gNB_IP,DNN,S_NSSAI,Attack_Detected,Attack_Type,Decision,Severity,Confidence,Risk_Score,Reasons
+REQ000001,T+0.000s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,False,NONE,ALLOW,NORMAL,0.4,0.0,Registration validated successfully.
+REQ000002,T+0.718s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,REPLAY,TAG,SUSPICIOUS,0.9,0.0,Replay-like behaviour detected.
+REQ000003,T+1.436s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,REPLAY,TAG,SUSPICIOUS,0.9,0.0,Replay-like behaviour detected.
+REQ000004,T+2.148s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,REPLAY,TAG,SUSPICIOUS,0.9,0.0,Replay-like behaviour detected.
+REQ000005,T+2.862s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,REGISTRATION_FLOOD,BLOCK,MALICIOUS,0.9,0.0,Registration flooding detected.
+REQ000006,T+3.572s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,REGISTRATION_FLOOD,BLOCK,MALICIOUS,0.9,0.0,Registration flooding detected.
+REQ000007,T+4.286s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,REGISTRATION_FLOOD,BLOCK,MALICIOUS,0.9,0.0,Registration flooding detected.
+REQ000008,T+5.002s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,REGISTRATION_FLOOD,BLOCK,MALICIOUS,0.9,0.0,Registration flooding detected.
+REQ000009,T+5.721s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,REGISTRATION_FLOOD,BLOCK,MALICIOUS,0.9,0.0,Registration flooding detected.

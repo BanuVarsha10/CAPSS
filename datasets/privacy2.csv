@@ -1,0 +1,2 @@
+Request_ID,Timestamp,Event,UE_ID,SUCI,Authentication_Result,Registration_Status,Cause_Code,gNB_IP,DNN,S_NSSAI,Attack_Detected,Attack_Type,Decision,Severity,Confidence,Risk_Score,Reasons
+REQ000001,07/16 13:30:32.579,Registration,,suci-0-999-70-0000-0-0-0009999999,,,UNKNOWN,127.0.0.1,,,True,INVALID_SUBSCRIBER,BLOCK,MALICIOUS,0.4,0.0,ue_id is empty. | dnn is empty. | snssai is empty. | Missing UE ID | Missing UE ID.

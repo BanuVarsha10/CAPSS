@@ -15,7 +15,7 @@ CSV_FILE = os.path.join(
     BASE_DIR,
     "..",
     "datasets",
-    "registration_dataset20.csv"
+    "privacy_test.csv"
 )
 
 RESULTS_DIR = os.path.join(
@@ -58,6 +58,20 @@ timestamps = []
 contains_real_identifier = False
 
 # --------------------------------------------------
+# True Row Count (NEW)
+# --------------------------------------------------
+# total_records (further below) is len(ue_ids), which only
+# counts rows where UE_ID was non-blank - a row like an
+# orphaned INVALID_SUBSCRIBER event (blank UE_ID) is
+# silently excluded from it. total_dataset_rows counts
+# EVERY row read from the CSV, regardless of whether UE_ID
+# was populated, so the report can show the true sample
+# size alongside the UE-specific one instead of the two
+# being conflated under one number.
+
+total_dataset_rows = 0
+
+# --------------------------------------------------
 # Per-UE tracking structures (NEW)
 # --------------------------------------------------
 
@@ -71,6 +85,28 @@ ue_auth_sequence = defaultdict(list)   # UE_ID -> chronological list of "FAIL"/"
 ue_timeline = defaultdict(list)        # UE_ID -> chronological list of event dicts (NEW)
 
 # --------------------------------------------------
+# Security Context tracking structures (NEW)
+# Populated from the Attack_Detected / Attack_Type / Decision /
+# Severity / Confidence columns that privacy1.csv carries in
+# from the Systems team's attack dataset.
+# --------------------------------------------------
+
+attack_detected_flags = []             # list of bool, one per record
+attack_type_counter = Counter()        # Attack_Type -> count (excludes NONE)
+ue_security_events = defaultdict(list) # UE_ID -> list of security event dicts
+orphaned_security_events = []          # NEW - security events where UE_ID was blank
+
+SEVERITY_RANK = {
+    "NONE": 0,
+    "NORMAL": 0,
+    "LOW": 1,
+    "SUSPICIOUS": 2,
+    "MEDIUM": 2,
+    "HIGH": 3,
+    "CRITICAL": 4,
+}
+
+# --------------------------------------------------
 # Read Dataset
 # --------------------------------------------------
 
@@ -79,6 +115,8 @@ with open(CSV_FILE, "r", encoding="utf-8") as file:
     reader = csv.DictReader(file)
 
     for row in reader:
+
+        total_dataset_rows += 1
 
         # ------------------------------------------
         # UE ID
@@ -218,6 +256,62 @@ with open(CSV_FILE, "r", encoding="utf-8") as file:
         # order (as encountered in the dataset) so the
         # full sequence of behaviour can be reviewed.
 
+        # ------------------------------------------
+        # Security Context Fields (NEW)
+        # ------------------------------------------
+        # Pulled straight from privacy1.csv's merged attack
+        # columns. Not recalculated - just read and reported.
+
+        request_id = row.get("Request_ID", "").strip() if row.get("Request_ID") else "N/A"
+
+        attack_detected_raw = row.get("Attack_Detected", "")
+        attack_detected_raw = attack_detected_raw.strip().upper() if attack_detected_raw else ""
+        attack_detected = attack_detected_raw in {"TRUE", "1", "YES"}
+
+        attack_type = row.get("Attack_Type", "")
+        attack_type = attack_type.strip().upper() if attack_type else "NONE"
+        if not attack_type:
+            attack_type = "NONE"
+
+        decision = row.get("Decision", "")
+        decision = decision.strip().upper() if decision else "UNKNOWN"
+
+        severity = row.get("Severity", "")
+        severity = severity.strip().upper() if severity else "NONE"
+
+        confidence_raw = row.get("Confidence", "")
+        try:
+            confidence_val = float(confidence_raw) if confidence_raw else 0.0
+        except ValueError:
+            confidence_val = 0.0
+
+        attack_detected_flags.append(attack_detected)
+
+        if attack_type != "NONE":
+            attack_type_counter[attack_type] += 1
+
+        if ue:
+
+            ue_security_events[ue].append({
+                "attack_detected": attack_detected,
+                "attack_type": attack_type,
+                "decision": decision,
+                "severity": severity,
+                "confidence": confidence_val,
+            })
+
+        else:
+
+            orphaned_security_events.append({
+                "request_id": request_id,
+                "attack_detected": attack_detected,
+                "attack_type": attack_type,
+                "decision": decision,
+                "severity": severity,
+                "confidence": confidence_val,
+                "suci": suci,
+            })
+
         if ue:
 
             ue_timeline[ue].append({
@@ -227,6 +321,11 @@ with open(CSV_FILE, "r", encoding="utf-8") as file:
                 "snssai": snssai,
                 "reg_result": reg_result if reg_result else "N/A",
                 "auth_result": auth_result if auth_result else "N/A",
+                "request_id": request_id,          # NEW
+                "attack_type": attack_type,         # NEW
+                "decision": decision,                # NEW
+                "severity": severity,                # NEW
+                "confidence": confidence_val,        # NEW
             })
 
 # --------------------------------------------------
@@ -1065,10 +1164,100 @@ else:
 # for large n, without ever needing a fixed sample-size
 # threshold.
 
-if total_records > 0:
-    sample_size_confidence = min(99.0, (1 - 1 / math.sqrt(total_records + 1)) * 100)
+if total_dataset_rows > 0:
+    sample_size_confidence = min(99.0, (1 - 1 / math.sqrt(total_dataset_rows + 1)) * 100)
 else:
     sample_size_confidence = 0.0
+
+# --------------------------------------------------
+# Security Context Analysis (NEW - item 2)
+# --------------------------------------------------
+
+total_security_events = len(attack_detected_flags)
+
+attack_count = sum(1 for flag in attack_detected_flags if flag)
+
+attack_rate = (
+    (attack_count / total_security_events) * 100
+    if total_security_events > 0 else 0.0
+)
+
+unique_attack_types = len(attack_type_counter)
+
+most_common_attack = "N/A"
+
+if attack_type_counter:
+    most_common_attack = attack_type_counter.most_common(1)[0][0]
+
+# --------------------------------------------------
+# Active Attack Type Breakdown (NEW)
+# --------------------------------------------------
+# attack_type_counter is built from EVERY row in the dataset,
+# including rows where UE_ID was blank (e.g. an orphaned
+# INVALID_SUBSCRIBER event). That means an attack type like
+# INVALID_SUBSCRIBER was already folded into
+# unique_attack_types / most_common_attack above - it just
+# had no visible line of its own in the report, so it looked
+# "missing" even though it wasn't. This gives every attack
+# type - including ones tied to a missing UE_ID - its own
+# explicit line, count, and share of total requests.
+
+attack_type_breakdown_lines = []
+
+for atype, count in attack_type_counter.most_common():
+
+    pct = (
+        (count / total_security_events) * 100
+        if total_security_events > 0 else 0.0
+    )
+
+    attack_type_breakdown_lines.append(
+        f"  {atype:<20} : {count} event(s)  ({pct:.2f} % of all requests)"
+    )
+
+attack_type_breakdown_text = (
+    "\n".join(attack_type_breakdown_lines)
+    if attack_type_breakdown_lines
+    else "  No attacks detected."
+)
+
+# --------------------------------------------------
+# Per-UE Security Breakdown (NEW - item 3)
+# --------------------------------------------------
+
+ue_security_summary = {}
+
+for ue, events in ue_security_events.items():
+
+    total_requests = len(events)
+
+    attack_events = sum(1 for e in events if e["attack_detected"])
+
+    ue_attack_types = sorted(
+        {e["attack_type"] for e in events if e["attack_type"] != "NONE"}
+    )
+
+    highest_severity = "NONE"
+
+    if events:
+        highest_severity = max(
+            (e["severity"] for e in events),
+            key=lambda s: SEVERITY_RANK.get(s, 0)
+        )
+
+    confidences = [e["confidence"] for e in events]
+
+    average_confidence = (
+        sum(confidences) / len(confidences) if confidences else 0.0
+    )
+
+    ue_security_summary[ue] = {
+        "total_requests": total_requests,
+        "attack_events": attack_events,
+        "attack_types": ue_attack_types,
+        "highest_severity": highest_severity,
+        "average_confidence": average_confidence,
+    }
 
 # --------------------------------------------------
 # Interpretation
@@ -1105,7 +1294,9 @@ report = f"""
 
 DATASET INFORMATION
 ---------------------------------------------------------
-Total Registration Records     : {total_records}
+Total Rows In Dataset          : {total_dataset_rows}
+
+Total Registration Records     : {total_records} (rows with a non-blank UE_ID)
 
 Unique UE IDs                  : {unique_ue}
 
@@ -1116,6 +1307,33 @@ Unique gNB IPs                 : {unique_gnb}
 Unique DNNs                    : {unique_dnn}
 
 Unique S-NSSAIs                : {unique_snssai}
+
+---------------------------------------------------------
+
+SECURITY CONTEXT ANALYSIS (NEW)
+---------------------------------------------------------
+Sourced directly from the Systems team's attack context
+merged into privacy1.csv (Attack_Detected, Attack_Type,
+Decision, Severity, Confidence). Not recalculated here.
+
+Total Security Events          : {total_security_events}
+
+Attack Detected Requests       : {attack_count}
+
+Attack Detection Rate          : {attack_rate:.2f} %
+
+Unique Attack Types            : {unique_attack_types}
+
+Most Common Attack             : {most_common_attack}
+
+Active Attack Type Breakdown (NEW):
+{attack_type_breakdown_text}
+
+Note: this breakdown counts EVERY request tagged with an
+attack type, whether or not it had a UE_ID - so an attack
+like INVALID_SUBSCRIBER (typically raised on requests with
+a missing/blank UE_ID) is always listed here even though it
+is excluded from the per-UE breakdown further below.
 
 ---------------------------------------------------------
 
@@ -1307,6 +1525,67 @@ else:
 report += """
 ---------------------------------------------------------
 
+PER-UE SECURITY BREAKDOWN (NEW)
+---------------------------------------------------------
+"""
+
+if ue_security_summary:
+
+    for ue in sorted(ue_security_summary.keys()):
+
+        summary = ue_security_summary[ue]
+
+        attack_types_text = (
+            ", ".join(summary["attack_types"])
+            if summary["attack_types"] else "None"
+        )
+
+        report += (
+            f"{ue}:\n"
+            f"  Total Requests       : {summary['total_requests']}\n"
+            f"  Attack Events        : {summary['attack_events']}\n"
+            f"  Attack Types         : {attack_types_text}\n"
+            f"  Highest Severity     : {summary['highest_severity']}\n"
+            f"  Average Confidence   : {summary['average_confidence']:.2f}\n\n"
+        )
+
+else:
+
+    report += "No security context available for any UE.\n"
+
+report += """
+---------------------------------------------------------
+
+SECURITY EVENTS WITH NO UE_ID (NEW)
+---------------------------------------------------------
+Requests where UE_ID was blank are excluded from the
+per-UE breakdown above (there is no UE to key them by),
+but a missing UE_ID combined with a detected attack is
+itself a meaningful signal (e.g. Attack_Type=INVALID_SUBSCRIBER)
+and should not be silently dropped from the report.
+"""
+
+if orphaned_security_events:
+
+    for event in orphaned_security_events:
+
+        report += (
+            f"[{event['request_id']}] "
+            f"Attack Detected={event['attack_detected']}  "
+            f"Attack Type={event['attack_type']}  "
+            f"Decision={event['decision']}  "
+            f"Severity={event['severity']}  "
+            f"Confidence={event['confidence']:.2f}  "
+            f"SUCI={event['suci'] or 'N/A'}\n"
+        )
+
+else:
+
+    report += "No security events with a missing UE_ID were found.\n"
+
+report += """
+---------------------------------------------------------
+
 FAILURE SEQUENCES (Chronological)
 ---------------------------------------------------------
 """
@@ -1344,7 +1623,7 @@ Correlation Risk Level         : {correlation_level}
 
 Correlation Confidence         : {confidence} %
 
-Sample-Size-Adjusted Confidence: {sample_size_confidence:.2f} % (based on {total_records} records, NEW - additional metric, does not replace the above)
+Sample-Size-Adjusted Confidence: {sample_size_confidence:.2f} % (based on {total_dataset_rows} rows in the dataset, NEW - additional metric, does not replace the above)
 
 ---------------------------------------------------------
 
@@ -1499,6 +1778,14 @@ if (
 ):
     report += "• No significant identifier reuse was detected.\n"
 
+if attack_type_counter.get("INVALID_SUBSCRIBER", 0) > 0:
+    report += (
+        f"• {attack_type_counter['INVALID_SUBSCRIBER']} INVALID_SUBSCRIBER "
+        "attack(s) detected on request(s) with a missing UE_ID - see the "
+        "Active Attack Type Breakdown and Security Events With No UE_ID "
+        "sections above.\n"
+    )
+
 # --------------------------------------------------
 # Behaviour Timeline (NEW)
 # --------------------------------------------------
@@ -1534,11 +1821,16 @@ if repeat_ues:
             ts_display = event["timestamp"]
 
             report += (
-                f"  - {ts_display} | gNB: {event['gnb'] or 'N/A'} | "
+                f"  - [{event.get('request_id', 'N/A')}] {ts_display} | "
+                f"gNB: {event['gnb'] or 'N/A'} | "
                 f"DNN: {event['dnn'] or 'N/A'} | "
                 f"S-NSSAI: {event['snssai'] or 'N/A'} | "
                 f"Reg: {event['reg_result']} | "
-                f"Auth: {event['auth_result']}\n"
+                f"Auth: {event['auth_result']} | "
+                f"Attack: {event.get('attack_type', 'N/A')} | "
+                f"Decision: {event.get('decision', 'N/A')} | "
+                f"Severity: {event.get('severity', 'N/A')} | "
+                f"Confidence: {event.get('confidence', 0.0):.2f}\n"
             )
 
 else:

@@ -5,11 +5,17 @@ from datetime import datetime
 # File Paths
 # --------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# CHANGED: now reads privacy1.csv, which carries the Systems team's
+# security-context columns (Request_ID, Cause_Code, Attack_Detected,
+# Attack_Type, Decision, Severity, Confidence, Risk_Score, Reasons)
+# in addition to the original registration fields. Previously this
+# pointed at datasets/registration_dataset20.csv, which has none of
+# those columns.
 INPUT_FILE = os.path.join(
     BASE_DIR,
     "..",
     "datasets",
-    "registration_dataset20.csv"
+    "privacy_test.csv"
 )
 RESULTS_DIR = os.path.join(
     BASE_DIR,
@@ -19,7 +25,7 @@ RESULTS_DIR = os.path.join(
 os.makedirs(RESULTS_DIR, exist_ok=True)
 OUTPUT_FILE = os.path.join(
     RESULTS_DIR,
-    "anonymized_registration_dataset.csv"
+    "anonymized_registration_dataset5.csv"
 )
 DUPLICATE_FILE = os.path.join(
     RESULTS_DIR,
@@ -39,7 +45,46 @@ first_timestamp = None
 # --------------------------------------------------
 # Output Fieldnames
 # --------------------------------------------------
+# CHANGED: extended to match privacy1.csv's full column set, in the
+# same order as the source file. Request_ID, Cause_Code,
+# Attack_Detected, Attack_Type, Decision, Severity, Confidence,
+# Risk_Score and Reasons are NEW - they are passed straight through
+# unchanged (not anonymized, not recalculated). Only Timestamp,
+# UE_ID, SUCI, gNB_IP, DNN and S_NSSAI go through the transforms
+# below, exactly as before.
 fieldnames = [
+    "Request_ID",
+    "Timestamp",
+    "Event",
+    "UE_ID",
+    "SUCI",
+    "Authentication_Result",
+    "Registration_Status",
+    "Cause_Code",
+    "gNB_IP",
+    "DNN",
+    "S_NSSAI",
+    "Attack_Detected",
+    "Attack_Type",
+    "Decision",
+    "Severity",
+    "Confidence",
+    "Risk_Score",
+    "Reasons"
+]
+# --------------------------------------------------
+# Duplicate-Detection Fieldnames
+# --------------------------------------------------
+# NOT the same as `fieldnames` above. Duplicate detection stays
+# scoped to the original anonymization-relevant fields only. If it
+# used the full `fieldnames` list instead, Request_ID (unique per
+# record, e.g. REQ000001) and Reasons (free-text, varies per record)
+# would make every row_key unique - duplicate_rows would always come
+# back empty, silently breaking duplicate detection. So "is this row
+# a duplicate registration" is still judged the same way it always
+# was, while every pass-through field still rides along unchanged in
+# the row itself.
+DUPLICATE_CHECK_FIELDS = [
     "Timestamp",
     "Event",
     "UE_ID",
@@ -104,11 +149,12 @@ with open(INPUT_FILE, "r", encoding="utf-8") as file:
         # ------------------------------------------
         # Duplicate Row Detection
         # ------------------------------------------
-        # A row is a duplicate if every output field matches a
-        # row already kept. Duplicates are removed from the
-        # anonymized output and set aside separately instead of
-        # being silently dropped.
-        row_key = tuple(row.get(field, "") for field in fieldnames)
+        # A row is a duplicate if every DUPLICATE_CHECK_FIELDS value
+        # matches a row already kept (see note above on why this is
+        # a narrower field set than the full output row). Duplicates
+        # are removed from the anonymized output and set aside
+        # separately instead of being silently dropped.
+        row_key = tuple(row.get(field, "") for field in DUPLICATE_CHECK_FIELDS)
         if row_key in seen_rows:
             duplicate_rows.append(row)
         else:

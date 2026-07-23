@@ -1,0 +1,146 @@
+============================================================
+CAPSS Evaluation Report
+============================================================
+
+Registrations Evaluated : 15
+
+Configurations Tested
+ - Fixed_ECIES
+ - Fixed_ML-KEM
+ - Fixed_IBE
+ - Fixed_GroupSignature
+ - Fixed_DynamicPseudonym
+ - Fixed_AdaptivePadding
+ - Fixed_ZKP
+ - CAPSS
+
+Configuration Summary (source: privacy_context_summary.csv)
+------------------------------------------------------------
+
+Fixed_ECIES
+Privacy Score        : 49.52
+Metadata Leakage     : 78.48
+Correlation Risk     : 75.42
+Linkability          : 78.73
+Processing Time (ms) : 4.00
+
+Fixed_ML-KEM
+Privacy Score        : 61.90
+Metadata Leakage     : 68.72
+Correlation Risk     : 75.42
+Linkability          : 70.60
+Processing Time (ms) : 6.00
+
+Fixed_IBE
+Privacy Score        : 49.52
+Metadata Leakage     : 78.48
+Correlation Risk     : 75.42
+Linkability          : 78.73
+Processing Time (ms) : 7.00
+
+Fixed_GroupSignature
+Privacy Score        : 61.90
+Metadata Leakage     : 49.20
+Correlation Risk     : 75.42
+Linkability          : 54.33
+Processing Time (ms) : 8.00
+
+Fixed_DynamicPseudonym
+Privacy Score        : 49.52
+Metadata Leakage     : 49.20
+Correlation Risk     : 75.42
+Linkability          : 54.33
+Processing Time (ms) : 7.00
+
+Fixed_AdaptivePadding
+Privacy Score        : 61.90
+Metadata Leakage     : 49.20
+Correlation Risk     : 75.42
+Linkability          : 54.33
+Processing Time (ms) : 6.50
+
+Fixed_ZKP
+Privacy Score        : 61.90
+Metadata Leakage     : 68.72
+Correlation Risk     : 75.42
+Linkability          : 70.60
+Processing Time (ms) : 8.50
+
+CAPSS
+Privacy Score        : 58.70
+Metadata Leakage     : 56.87
+Correlation Risk     : 63.41
+Linkability          : 60.72
+Processing Time (ms) : 8.00
+
+------------------------------------------------------------
+Recommendation Match Rate (CAPSS rows only) : 100.00%
+Authentication Success Rate : 93.33%
+
+CAPSS Improvements
+------------------------------------------------------------
+
+Compared with : Fixed_ECIES
+Privacy Improvement      : +9.18
+Leakage Reduction        : 27.54%
+Correlation Reduction    : 15.92%
+Linkability Reduction    : 22.88%
+Extra Processing Time    : 4.0 ms
+
+Compared with : Fixed_ML-KEM
+Privacy Improvement      : -3.20
+Leakage Reduction        : 17.24%
+Correlation Reduction    : 15.92%
+Linkability Reduction    : 13.99%
+Extra Processing Time    : 2.0 ms
+
+Compared with : Fixed_IBE
+Privacy Improvement      : +9.18
+Leakage Reduction        : 27.54%
+Correlation Reduction    : 15.92%
+Linkability Reduction    : 22.88%
+Extra Processing Time    : 1.0 ms
+
+Compared with : Fixed_GroupSignature
+Privacy Improvement      : -3.20
+Leakage Reduction        : -15.59%
+Correlation Reduction    : 15.92%
+Linkability Reduction    : -11.76%
+Extra Processing Time    : 0.0 ms
+
+Compared with : Fixed_DynamicPseudonym
+Privacy Improvement      : +9.18
+Leakage Reduction        : -15.59%
+Correlation Reduction    : 15.92%
+Linkability Reduction    : -11.76%
+Extra Processing Time    : 1.0 ms
+
+Compared with : Fixed_AdaptivePadding
+Privacy Improvement      : -3.20
+Leakage Reduction        : -15.59%
+Correlation Reduction    : 15.92%
+Linkability Reduction    : -11.76%
+Extra Processing Time    : 1.5 ms
+
+Compared with : Fixed_ZKP
+Privacy Improvement      : -3.20
+Leakage Reduction        : 17.24%
+Correlation Reduction    : 15.92%
+Linkability Reduction    : 13.99%
+Extra Processing Time    : -0.5 ms
+
+Attack Analysis
+------------------------------------------------------------
+DUPLICATE_REGISTRATION   Count: 4      Block Rate: 0.0%
+INVALID_SUBSCRIBER       Count: 1      Block Rate: 100.0%
+NONE                     Count: 2      Block Rate: 0.0%
+REGISTRATION_FLOOD       Count: 5      Block Rate: 100.0%
+REPLAY                   Count: 3      Block Rate: 0.0%
+
+============================================================
+Conclusion
+
+CAPSS achieved a higher privacy score than: ECIES, IBE, DynamicPseudonym.
+CAPSS achieved a lower privacy score than: ML-KEM, GroupSignature, AdaptivePadding, ZKP.
+
+CAPSS uses adaptive scheme selection based on registration context rather than a single fixed scheme, so its privacy score is not uniformly the highest across all baselines - see capss_improvement.csv for the exact per-baseline figures.

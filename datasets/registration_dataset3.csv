@@ -1,0 +1,2 @@
+Request_ID,Timestamp,Event,UE_ID,SUCI,Authentication_Result,Registration_Status,Cause_Code,gNB_IP,DNN,S_NSSAI
+REQ000001,07/08 10:20:29.854,Registration,imsi-999700000000001,suci-0-999-70-0000-0-0-0000000001,,Success,SUCCESS,127.0.0.1,internet,SST:1 SD:0x1
