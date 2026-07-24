@@ -128,27 +128,19 @@ TAG = "TAG"
 BLOCK = "BLOCK"
 
 
-# ==========================================================
-# Severity Labels
-# ==========================================================
-
-NORMAL = "NORMAL"
-
-SUSPICIOUS = "SUSPICIOUS"
-
-MALICIOUS = "MALICIOUS"
-
-
-# ==========================================================
 # Risk Levels
-# ==========================================================
+# Used by privacy evaluation and policy selection.
 
 LOW = "LOW"
-
 MEDIUM = "MEDIUM"
-
 HIGH = "HIGH"
 
+# Threat Severity
+# Used by Pre-AMF detectors.
+
+NORMAL = "NORMAL"
+SUSPICIOUS = "SUSPICIOUS"
+MALICIOUS = "MALICIOUS"
 
 # ==========================================================
 # Detection Confidence
@@ -208,38 +200,21 @@ CAUSE_FLOOD = "REGISTRATION_FLOOD"
 
 
 # ==========================================================
-# Validation Scores
+# Threat Score Weights
 # ==========================================================
 
-HEADER_VALIDATION_SCORE = 100
+THREAT_DUPLICATE_WEIGHT = 25
 
-PARAMETER_VALIDATION_SCORE = 100
+THREAT_RATE_WEIGHT = 30
 
-SUBSCRIBER_VALIDATION_SCORE = 100
+THREAT_SUBSCRIBER_WEIGHT = 20
 
+THREAT_HEADER_WEIGHT = 5
 
-# ==========================================================
-# Detection Scores
-# ==========================================================
+THREAT_PARAMETER_WEIGHT = 5
 
-DUPLICATE_SCORE = 50
+THREAT_HISTORY_WEIGHT = 15
 
-REPLAY_SCORE = 80
-
-FLOOD_SCORE = 95
-
-INVALID_SUBSCRIBER_SCORE = 100
-
-INVALID_PARAMETER_SCORE = 90
-
-INVALID_HEADER_SCORE = 100
-
-
-# ==========================================================
-# Rate Monitor Defaults
-# ==========================================================
-
-DEFAULT_WINDOW_SECONDS = 30
 
 
 # ==========================================================

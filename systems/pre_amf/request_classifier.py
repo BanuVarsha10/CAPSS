@@ -50,6 +50,11 @@ from systems.pre_amf.models import (
     ClassificationResult,
 )
 
+SEVERITY_ORDER = {
+    NORMAL: 0,
+    SUSPICIOUS: 1,
+    MALICIOUS: 2,
+}
 
 class RequestClassifier:
     """
@@ -171,10 +176,17 @@ class RequestClassifier:
 
                 decision = TAG
 
-            severity = max(
-                severity,
-                context.duplicate_result.severity
-            )
+            SEVERITY_ORDER = {
+                NORMAL: 0,
+                SUSPICIOUS: 1,
+                MALICIOUS: 2,
+            }
+
+            if (
+                SEVERITY_ORDER[context.duplicate_result.severity]
+                > SEVERITY_ORDER[severity]
+            ):
+                severity = context.duplicate_result.severity
 
             attack_type = context.duplicate_result.attack_type
 
@@ -225,7 +237,7 @@ class RequestClassifier:
         # ==================================================
         # Final Result
         # ==================================================
-
+    
         result = ClassificationResult(
 
             decision=decision,

@@ -46,6 +46,8 @@ from systems.pre_amf.report import (
     ReportGenerator,
 )
 
+from systems.threat_context.generator import ThreatContextGenerator
+
 
 # ==========================================================
 # Paths
@@ -75,6 +77,8 @@ class AttackRunner:
     def __init__(self):
 
         self.validator = PreAMFValidator()
+
+        self.threat_generator = ThreatContextGenerator()
 
         self.report_generator = ReportGenerator()
 
@@ -106,16 +110,16 @@ class AttackRunner:
 
         for request in requests:
 
-            context = self.validator.validate_with_context(
-
+            validation_context = self.validator.validate_with_context(
                 request
+            )
 
+            threat_context = self.threat_generator.generate(
+                validation_context
             )
 
             self.report_generator.build_report(
-
-                context
-
+                threat_context
             )
 
         # ------------------------------------------

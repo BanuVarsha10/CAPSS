@@ -25,7 +25,6 @@ from pymongo import MongoClient
 
 from systems.pre_amf.attack_rules import (
     BLOCK_UNKNOWN_SUBSCRIBERS,
-    SUBSCRIBER_VALIDATION_SCORE,
     MESSAGE_INVALID_SUBSCRIBER,
 )
 
@@ -125,7 +124,7 @@ class SubscriberValidator:
 
         warnings = []
 
-        score = SUBSCRIBER_VALIDATION_SCORE
+        score = 100
 
         # --------------------------------------------------
         # UE ID Present

@@ -18,10 +18,10 @@ from systems.pre_amf.attack_rules import (
     ATTACK_NONE,
     MAX_REGISTRATIONS_PER_WINDOW,
     REGISTRATION_WINDOW,
-    FLOOD_SCORE,
     LOW_CONFIDENCE,
     HIGH_CONFIDENCE,
     NORMAL,
+    SUSPICIOUS,
     MALICIOUS,
     MESSAGE_FLOOD,
 )
@@ -99,8 +99,24 @@ class RateMonitor:
         if current_count >= MAX_REGISTRATIONS_PER_WINDOW:
 
             history.flood_count += 1
-
             history.last_attack = ATTACK_FLOOD
+
+            excess = current_count - MAX_REGISTRATIONS_PER_WINDOW + 1
+
+            score = round(
+                min((excess / MAX_REGISTRATIONS_PER_WINDOW) * 100, 100),
+                2
+            )
+
+            confidence = round(
+                min(0.50 + (excess * 0.10), 1.0),
+                2
+            )
+
+            if score >= 80:
+                severity = MALICIOUS
+            else:
+                severity = SUSPICIOUS
 
             return DetectionResult(
 
@@ -108,11 +124,11 @@ class RateMonitor:
 
                 attack_type=ATTACK_FLOOD,
 
-                confidence=HIGH_CONFIDENCE,
+                confidence=confidence,
 
-                severity=MALICIOUS,
+                severity=severity,
 
-                score=FLOOD_SCORE,
+                score=score,
 
                 message=MESSAGE_FLOOD,
 

@@ -28,7 +28,6 @@ from dataclasses import fields
 
 from systems.pre_amf.attack_rules import (
     REQUIRED_FIELDS,
-    HEADER_VALIDATION_SCORE,
 )
 
 from systems.pre_amf.models import (
@@ -51,7 +50,7 @@ class HeaderValidator:
         errors = []
         warnings = []
 
-        score = HEADER_VALIDATION_SCORE
+        score = 100
 
         # ==================================================
         # Request Exists

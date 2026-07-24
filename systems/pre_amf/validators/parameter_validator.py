@@ -34,7 +34,6 @@ from systems.pre_amf.attack_rules import (
     VALID_AUTH_RESULTS,
     VALID_REGISTRATION_STATUS,
     VALID_REGISTRATION_TYPES,
-    PARAMETER_VALIDATION_SCORE,
 )
 
 from systems.pre_amf.models import (
@@ -57,7 +56,7 @@ class ParameterValidator:
         errors = []
         warnings = []
 
-        score = PARAMETER_VALIDATION_SCORE
+        score = 100
 
         
         # ==================================================

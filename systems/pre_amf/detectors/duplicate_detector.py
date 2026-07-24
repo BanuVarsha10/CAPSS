@@ -27,10 +27,9 @@ from systems.pre_amf.attack_rules import (
     LOW_CONFIDENCE,
     MEDIUM_CONFIDENCE,
     HIGH_CONFIDENCE,
-    DUPLICATE_SCORE,
-    REPLAY_SCORE,
     NORMAL,
     SUSPICIOUS,
+    MALICIOUS,
     MESSAGE_DUPLICATE,
     MESSAGE_REPLAY,
 )
@@ -115,20 +114,36 @@ class DuplicateDetector:
         ):
 
             history.replay_count += 1
-
             history.last_attack = ATTACK_REPLAY
-            
+
+            replay_events = history.replay_count
+
+            score = round(
+                min((replay_events / 5.0) * 100, 100),
+                2
+            )
+
+            confidence = round(
+                min(0.50 + (replay_events * 0.10), 1.0),
+                2
+            )
+
+            if score >= 80:
+                severity = MALICIOUS
+            else:
+                severity = SUSPICIOUS
+
             return DetectionResult(
 
                 detected=True,
 
                 attack_type=ATTACK_REPLAY,
 
-                confidence=HIGH_CONFIDENCE,
+                confidence=confidence,
 
-                severity=SUSPICIOUS,
+                severity=severity,
 
-                score=REPLAY_SCORE,
+                score=score,
 
                 message=MESSAGE_REPLAY,
 
@@ -149,8 +164,24 @@ class DuplicateDetector:
         if interval <= DUPLICATE_INTERVAL:
 
             history.duplicate_count += 1
-
             history.last_attack = ATTACK_DUPLICATE
+
+            duplicate_events = history.duplicate_count
+
+            score = round(
+                min((duplicate_events / 5.0) * 100, 100),
+                2
+            )
+
+            confidence = round(
+                min(0.40 + (duplicate_events * 0.12), 1.0),
+                2
+            )
+
+            if score >= 80:
+                severity = MALICIOUS
+            else:
+                severity = SUSPICIOUS
 
             return DetectionResult(
 
@@ -158,11 +189,11 @@ class DuplicateDetector:
 
                 attack_type=ATTACK_DUPLICATE,
 
-                confidence=MEDIUM_CONFIDENCE,
+                confidence=confidence,
 
-                severity=SUSPICIOUS,
+                severity=severity,
 
-                score=DUPLICATE_SCORE,
+                score=score,
 
                 message=MESSAGE_DUPLICATE,
 

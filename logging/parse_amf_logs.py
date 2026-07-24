@@ -18,7 +18,7 @@ LOG_FILE = os.environ.get(
 OUTPUT_DIR = os.path.join(BASE_DIR, "..", "datasets")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-OUTPUT_FILE = os.path.join(OUTPUT_DIR, "registration_dataset4.csv")
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "registration_dataset.csv")
 
 # --------------------------------------------------
 # Regular Expressions
