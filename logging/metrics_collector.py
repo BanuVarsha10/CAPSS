@@ -7,7 +7,11 @@ import csv
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+<<<<<<< HEAD
 CSV_FILE = os.path.join(BASE_DIR, "..", "datasets", "registration_dataset.csv")
+=======
+CSV_FILE = os.path.join(BASE_DIR, "..", "datasets", "privacy_test.csv")
+>>>>>>> origin/privacy
 
 RESULTS_DIR = os.path.join(BASE_DIR, "..", "results")
 os.makedirs(RESULTS_DIR, exist_ok=True)

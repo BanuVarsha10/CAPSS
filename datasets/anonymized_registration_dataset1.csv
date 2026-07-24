@@ -1,0 +1,6 @@
+Request_ID,Timestamp,Event,UE_ID,SUCI,Authentication_Result,Registration_Status,Cause_Code,gNB_IP,DNN,S_NSSAI,Attack_Detected,Attack_Type,Decision,Severity,Confidence,Risk_Score,Reasons
+REQ000001,T+0.000s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,False,NONE,ALLOW,NORMAL,0.4,0,Registration validated successfully.
+REQ000005,T+12.097s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,DUPLICATE_REGISTRATION,TAG,SUSPICIOUS,0.7,70,Duplicate registration detected.
+REQ000002,T+3.016s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,DUPLICATE_REGISTRATION,TAG,SUSPICIOUS,0.7,40,Duplicate registration detected.
+REQ000003,T+6.036s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,DUPLICATE_REGISTRATION,TAG,SUSPICIOUS,0.7,50,Duplicate registration detected.
+REQ000004,T+9.085s,Registration,UE_001,SUCI_001,,Success,SUCCESS,127.0.xxx.xxx,DEFAULT_DNN,DEFAULT_SLICE,True,DUPLICATE_REGISTRATION,TAG,SUSPICIOUS,0.7,60,Duplicate registration detected.

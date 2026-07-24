@@ -18,7 +18,7 @@ LOG_FILE = os.environ.get(
 OUTPUT_DIR = os.path.join(BASE_DIR, "..", "datasets")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-OUTPUT_FILE = os.path.join(OUTPUT_DIR, "registration_dataset.csv")
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "registration_dataset4.csv")
 
 # --------------------------------------------------
 # Regular Expressions
@@ -36,6 +36,8 @@ dnn_re = re.compile(r"DNN\[([^\]]+)\]")
 
 snssai_re = re.compile(r"S_NSSAI\[([^\]]+)\]")
 
+cause_re = re.compile(r"[Cc]ause[\[\(]([^\]\)]+)[\]\)]")
+
 # --------------------------------------------------
 # Variables
 # --------------------------------------------------
@@ -45,6 +47,8 @@ records = []
 current = None
 
 last_gnb_ip = ""
+
+request_counter = 0
 
 # --------------------------------------------------
 # Read Log
@@ -76,6 +80,8 @@ with open(LOG_FILE, "r", encoding="utf-8", errors="ignore") as file:
                 records.append(current)
 
             ts = timestamp_re.search(line)
+
+            request_counter += 1
 
             current = {
                 "Request_ID": "",
@@ -138,6 +144,16 @@ with open(LOG_FILE, "r", encoding="utf-8", errors="ignore") as file:
         if "Registration complete" in line:
 
             current["Registration_Status"] = "Success"
+            current["Cause_Code"] = "SUCCESS"
+
+        # -------------------------------
+        # Cause Code (explicit cause in log line, overrides default)
+        # -------------------------------
+
+        cause = cause_re.search(line)
+
+        if cause:
+            current["Cause_Code"] = cause.group(1)
 
             if current["Authentication_Result"] == "":
                 current["Authentication_Result"] = "Success"

@@ -1,0 +1,16 @@
+registration_id,policy_id,selected_scheme,selected_scheme_id,hybrid_schemes,confidence,risk_assessment,reason,is_fallback,primary_score,apply_to_ue,timestamp
+REQ000001,POL-F606B187,ECIES,SCHEME-001,ECIES|AP,0.62,medium,Selected ECIES with Adaptive Padding for baseline protection and reduced metadata exposure.,False,0.62,imsi-999700000000001,2026-07-23T10:00:00
+REQ000002,POL-08DCF55C,ZKP,SCHEME-007,ZKP|GS,0.81,high,Selected Zero-Knowledge Proofs with Group Signatures to prevent replay-based impersonation.,False,0.81,imsi-999700000000001,2026-07-23T10:05:00
+REQ000003,POL-AFD41EA2,GS,SCHEME-006,ZKP|GS,0.78,high,"Selected Group Signatures with Zero-Knowledge Proofs for anonymous, replay-resistant authentication.",False,0.78,imsi-999700000000001,2026-07-23T10:10:00
+REQ000004,POL-8806B4F5,ZKP,SCHEME-007,ZKP|GS,0.81,high,Selected Zero-Knowledge Proofs with Group Signatures to prevent replay-based impersonation.,False,0.81,imsi-999700000000001,2026-07-23T10:15:00
+REQ000005,POL-F8664353,DP,SCHEME-004,ML-KEM|DP,0.88,high,Selected Dynamic Pseudonyms with ML-KEM to prevent subscriber tracking during the flood.,False,0.88,imsi-999700000000001,2026-07-23T10:20:00
+REQ000006,POL-F6C5E0CB,ML-KEM,SCHEME-002,ML-KEM|DP,0.85,high,Selected ML-KEM with Dynamic Pseudonyms for quantum-resistant protection during the flood.,False,0.85,imsi-999700000000001,2026-07-23T10:25:00
+REQ000007,POL-0B76E162,DP,SCHEME-004,ML-KEM|DP,0.88,high,Selected Dynamic Pseudonyms with ML-KEM to prevent subscriber tracking during the flood.,False,0.88,imsi-999700000000001,2026-07-23T10:30:00
+REQ000008,POL-B71F9B24,ML-KEM,SCHEME-002,ML-KEM|DP,0.85,high,Selected ML-KEM with Dynamic Pseudonyms for quantum-resistant protection during the flood.,False,0.85,imsi-999700000000001,2026-07-23T10:35:00
+REQ000009,POL-41B5CE1F,DP,SCHEME-004,ML-KEM|DP,0.88,high,Selected Dynamic Pseudonyms with ML-KEM to prevent subscriber tracking during the flood.,False,0.88,imsi-999700000000001,2026-07-23T10:40:00
+REQ000010,POL-4758D577,AP,SCHEME-003,ECIES|AP,0.6,medium,Selected Adaptive Padding with ECIES to reduce metadata exposure.,False,0.6,imsi-999700000000001,2026-07-23T10:45:00
+REQ000011,POL-4ADB150E,DP,SCHEME-004,DP|GS,0.74,high,Selected Dynamic Pseudonyms with Group Signatures to prevent tracking across duplicate registrations.,False,0.74,imsi-999700000000001,2026-07-23T10:50:00
+REQ000012,POL-8E92B075,GS,SCHEME-006,DP|GS,0.72,high,Selected Group Signatures with Dynamic Pseudonyms for anonymous authentication across duplicate registrations.,False,0.72,imsi-999700000000001,2026-07-23T10:55:00
+REQ000013,POL-86300625,DP,SCHEME-004,DP|GS,0.74,high,Selected Dynamic Pseudonyms with Group Signatures to prevent tracking across duplicate registrations.,False,0.74,imsi-999700000000001,2026-07-23T11:00:00
+REQ000014,POL-7D24D987,GS,SCHEME-006,DP|GS,0.72,high,Selected Group Signatures with Dynamic Pseudonyms for anonymous authentication across duplicate registrations.,False,0.72,imsi-999700000000001,2026-07-23T11:05:00
+REQ000015,POL-914B13CE,IBE,SCHEME-005,ZKP|IBE,0.55,medium,Selected Identity-Based Encryption with Zero-Knowledge Proofs for lightweight identity protection against impersonation.,False,0.55,,2026-07-23T11:10:00
