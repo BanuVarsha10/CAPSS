@@ -1,11 +1,11 @@
 
 ========== Registration Metrics ==========
 
-Total Registration Records : 13
-Successful Registrations   : 13
-Authentication Successes   : 13
+Total Registration Records : 5
+Successful Registrations   : 5
+Authentication Successes   : 5
 Authentication Failures    : 0
-Unique UE IDs              : 13
-Unique SUCIs               : 13
+Unique UE IDs              : 1
+Unique SUCIs               : 1
 
 ==========================================

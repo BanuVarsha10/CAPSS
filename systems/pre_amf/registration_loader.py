@@ -114,7 +114,9 @@ class RegistrationLoader:
                         "SUCCESS"
                     ),
 
-                    experiment_name="NORMAL",
+                    experiment_name=row.get(
+                    "Experiment",
+                    "NORMAL"),
 
                     attack_label="NONE",
 

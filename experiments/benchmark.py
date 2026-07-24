@@ -231,6 +231,12 @@ def benchmark(
     # --------------------------------------------------
 
     # --------------------------------------------------
+    if experiment_name == "single_ue":
+
+        print("\nStart Single UE:")
+        print(f"python3 {SYSTEMS/'start_single_ue.py'}")
+        input("\nPress ENTER after registration succeeds...")
+
     if experiment_name == "duplicate_attack":
 
         print("\nStart Duplicate Attack:")
@@ -251,56 +257,13 @@ def benchmark(
     
     elif experiment_name == "mixed_traffic":
 
-        print()
+        print("\nStarting Mixed Traffic Scenario...\n")
 
-        print("=" * 60)
-
-        print("Mixed Traffic Scenario")
-
-        print("=" * 60)
-
-        # ------------------------------------------
-        # Step 1
-        # ------------------------------------------
-
-        print("\nSTEP 1")
-
-        print("Start 2 Normal UEs")
-
-        print(
-            f"python3 {SYSTEMS/'start_multiple_ues.py'} --count 2"
-        )
-
-        input("\nPress ENTER after normal traffic completes...")
-
-        # ------------------------------------------
-        # Step 2
-        # ------------------------------------------
-
-        print("\nSTEP 2")
-
-        print("Start Duplicate Registration Attack")
-
-        print(
-            f"python3 {SYSTEMS/'start_duplicate_attack.py'}"
-        )
-
-        input("\nPress ENTER after duplicate attack completes...")
-
-        # ------------------------------------------
-        # Step 3
-        # ------------------------------------------
-
-        print("\nSTEP 3")
-
-        print("Start Invalid Subscriber Attack")
-
-        print(
-            f"python3 {SYSTEMS/'start_invalid_subscriber.py'}"
-        )
-
-        input("\nPress ENTER after invalid subscriber attack completes...")
-
+        run([
+            "python3",
+            str(SYSTEMS / "start_mixed_traffic.py")
+        ])
+        
     else:
 
         print("\nStart UE(s) in another terminal:")

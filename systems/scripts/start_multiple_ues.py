@@ -31,6 +31,12 @@ parser.add_argument(
 
 )
 
+parser.add_argument(
+    "--exit-after-launch",
+    action="store_true",
+    help="Launch UEs and return immediately"
+)
+
 args = parser.parse_args()
 
 # ==========================================================

@@ -290,7 +290,19 @@ class PreAMFValidator:
             context.classification_result.attack_type
 
         )
+        
+        if history.first_seen is None:
+            history.first_seen = request.timestamp
 
+        history.last_seen = request.timestamp
+
+        history.last_gnb = request.gnb_ip
+
+        history.last_suci = request.suci
+
+        history.timestamps.append(request.timestamp)
+
+        history.registration_count += 1
         # ----------------------------------------------
         # Save History
         # ----------------------------------------------

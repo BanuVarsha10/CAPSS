@@ -116,7 +116,7 @@ for i in range(traffic["invalid_subscriber"]):
 # Registration Flood
 # ==========================================================
 
-for i in range(traffic["registration_flood"]):
+for i in range(traffic.get("registration_flood", 0)):
 
     print(f"\nRegistration Flood {i+1}")
 

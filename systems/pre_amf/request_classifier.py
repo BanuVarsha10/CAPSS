@@ -215,6 +215,12 @@ class RequestClassifier:
         else:
 
             context.statistics.blocked += 1
+    
+        # ==================================================
+        # Remove duplicate reasons
+        # ==================================================
+
+        reasons = list(dict.fromkeys(reasons))
 
         # ==================================================
         # Final Result

@@ -1,7 +1,7 @@
 {
     "experiment_name": "mixed_traffic",
 
-    "ue_count": 4,
+    "ue_count": 10,
 
     "duration": 60,
 
@@ -13,7 +13,8 @@
 
         "duplicate": 1,
 
-        "invalid_subscriber": 1
+        "invalid_subscriber": 1,
 
+        "registration_flood": 1
     }
 }

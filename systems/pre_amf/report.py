@@ -6,36 +6,33 @@ File:
 
 Purpose
 -------
-Generates standardized attack reports from the
-Pre-AMF Security Layer.
+Serializes ThreatContext objects into reports and CSV files.
 
-This module converts the ValidationContext into an
-AttackReport that can later be consumed by:
+This module performs NO threat calculation or attack detection.
+Those responsibilities belong to:
 
-• Privacy Module
-• AI Recommendation Engine
-• CSV Export
-• Result Reporting
+• Pre-AMF Security Layer
+• Threat Context Generator
 
-No validation or attack detection logic exists here.
+Responsibilities:
+• Build report objects
+• Export systems_output.csv
+• Print summaries
 """
 
 from pathlib import Path
 import csv
 
-from systems.pre_amf.models import (
-    ValidationContext,
-    AttackReport,
-)
+from systems.pre_amf.models import AttackReport
+from systems.threat_context.models import ThreatContext
 
 
 class ReportGenerator:
     """
-    Generates AttackReport objects and exports them.
+    Generates reports from ThreatContext objects.
     """
 
     def __init__(self):
-
         self.reports = []
 
     # ======================================================
@@ -44,58 +41,32 @@ class ReportGenerator:
 
     def build_report(
         self,
-        context: ValidationContext,
+        threat_context: ThreatContext,
     ) -> AttackReport:
-
-        confidence = 0.0
-
-        # --------------------------------------------------
-        # Highest detector confidence
-        # --------------------------------------------------
-
-        if context.duplicate_result is not None:
-
-            confidence = max(
-
-                confidence,
-
-                context.duplicate_result.confidence
-
-            )
-
-        if context.rate_result is not None:
-
-            confidence = max(
-
-                confidence,
-
-                context.rate_result.confidence
-
-            )
 
         report = AttackReport(
 
-            request_id=context.request.request_id,
+            request_id=threat_context.registration_id,
 
-            experiment_name=context.request.experiment_name,
+            experiment_name=threat_context.experiment_name,
 
-            timestamp=context.request.timestamp,
+            timestamp=threat_context.timestamp,
 
-            ue_id=context.request.ue_id,
+            ue_id=threat_context.ue_id,
 
-            attack_detected=context.classification_result.attack_flag,
+            attack_detected=threat_context.attack_detected,
 
-            attack_type=context.classification_result.attack_type,
+            attack_type=threat_context.attack_type,
 
-            decision=context.classification_result.decision,
+            decision=threat_context.decision,
 
-            severity=context.classification_result.severity,
+            severity=threat_context.severity,
 
-            confidence=confidence,
+            confidence=threat_context.confidence,
 
-            risk_score=0.0,
+            risk_score=threat_context.threat_score,
 
-            reasons=context.classification_result.reasons
+            reasons=threat_context.reasons,
 
         )
 
@@ -115,30 +86,22 @@ class ReportGenerator:
         output_file = Path(output_file)
 
         output_file.parent.mkdir(
-
             parents=True,
-
-            exist_ok=True
-
+            exist_ok=True,
         )
 
         with open(
-
             output_file,
-
             "w",
-
             newline="",
-
-            encoding="utf-8"
-
+            encoding="utf-8",
         ) as csvfile:
 
             writer = csv.writer(csvfile)
 
             writer.writerow([
 
-                "Request_ID",
+                "Registration_ID",
 
                 "Experiment",
 
@@ -154,9 +117,9 @@ class ReportGenerator:
 
                 "Severity",
 
-                "Confidence",
+                "Threat_Score",
 
-                "Risk_Score",
+                "Threat_Confidence",
 
                 "Reasons",
 
@@ -182,9 +145,9 @@ class ReportGenerator:
 
                     report.severity,
 
-                    report.confidence,
-
                     report.risk_score,
+
+                    report.confidence,
 
                     " | ".join(report.reasons),
 
@@ -194,16 +157,11 @@ class ReportGenerator:
     # Summary
     # ======================================================
 
-    def print_summary(
-        self,
-    ):
+    def print_summary(self):
 
         print()
-
         print("=" * 60)
-
-        print("Pre-AMF Security Report")
-
+        print("CAPSS Systems Report")
         print("=" * 60)
 
         print(f"Total Requests : {len(self.reports)}")
@@ -220,6 +178,18 @@ class ReportGenerator:
 
         print(f"Normal Traffic : {len(self.reports) - attacks}")
 
+        if self.reports:
+
+            avg_score = sum(
+
+                report.risk_score
+
+                for report in self.reports
+
+            ) / len(self.reports)
+
+            print(f"Average Threat Score : {avg_score:.2f}")
+
         print("=" * 60)
 
 
@@ -228,21 +198,18 @@ class ReportGenerator:
 # ==========================================================
 
 def generate_report(
-    context: ValidationContext,
+    threat_context: ThreatContext,
 ) -> AttackReport:
 
     generator = ReportGenerator()
 
-    return generator.build_report(context)
+    return generator.build_report(threat_context)
 
 
 def export_reports(
     reports,
     output_file,
 ):
-    """
-    Export a list of AttackReport objects.
-    """
 
     generator = ReportGenerator()
 
