@@ -25,7 +25,17 @@ export function SystemsPrivacyPanel({ device }: { device: DeviceResult | null })
   }
 
   const privacyTrend = device.steps.map((s) => s.privacy_result.privacy_score);
-  const exposureTrend = device.steps.map((s) => 1 - s.privacy_result.metadata_leakage);
+  // Investigation fix: was `1 - metadata_leakage` under an "exposure" label —
+  // the same unintended-inversion bug class already fixed in Pipeline
+  // Visualizer (which shows the RAW leakage/exposure value + Meter's
+  // `invertColor`, never an inverted number — see Meter.tsx's own docstring
+  // for why that's the correct pattern for "a raw leakage/exposure score").
+  // An "exposure" label showing 0.15 when the real, unminimized-field
+  // exposure is 0.85 is self-contradictory and was never justified by any
+  // comment here, unlike every other deliberate framing choice in this
+  // codebase. Now shows the real metadata_leakage value directly, matching
+  // Pipeline Visualizer exactly.
+  const exposureTrend = device.steps.map((s) => s.privacy_result.metadata_leakage);
   const correlationTrend = device.steps.map((s) => s.privacy_result.correlation_score);
   const latest = device.steps[device.steps.length - 1];
 
@@ -46,7 +56,8 @@ export function SystemsPrivacyPanel({ device }: { device: DeviceResult | null })
           <div className="card-grid">
             <Meter
               label="Metadata exposure score"
-              value={1 - latest.privacy_result.metadata_leakage}
+              value={latest.privacy_result.metadata_leakage}
+              invertColor
               detail={`Raw metadata_leakage: ${latest.privacy_result.metadata_leakage.toFixed(2)} (lower is better) — computed from the ORIGINAL, unminimized fields`}
             />
             <Meter

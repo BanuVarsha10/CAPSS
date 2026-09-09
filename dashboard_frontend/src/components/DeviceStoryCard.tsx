@@ -371,9 +371,18 @@ function StageDetail({
   }
 
   if (entry.stage === "baseline_previewed" && d.winner) {
+    // Same fix as HistoryBasedBaselinePreview below and the static
+    // Baseline (before the attack) card: this is d.winner from the
+    // backend's baseline_preview (pipeline_service.py's pre-attack,
+    // history-influenced _read_only_recommendation() call) — a real but
+    // purely informational preview, never the forced comparison_result
+    // .scheme_a baseline that's actually executed for the real
+    // before/after assessment. Explicitly labeled so it can never again
+    // read as "what was executed."
     return (
       <div className="story-stage-detail">
-        Agent's baseline suggestion: <span className="mono">{String(d.winner)}</span>
+        Agent's history-based instinct: <span className="mono">{String(d.winner)}</span>{" "}
+        <span style={{ color: "var(--text-muted)" }}>(informational only — not the assessment baseline)</span>
       </div>
     );
   }

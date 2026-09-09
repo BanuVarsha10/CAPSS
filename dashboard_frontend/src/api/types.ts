@@ -501,8 +501,19 @@ export interface ScalingRunSummary {
 export const STAGE_LABELS: Record<string, string> = {
   registering_context: "Building registration context from real network data",
   registered: "Baseline registration recorded",
-  baseline_previewed: "Agent's baseline suggestion computed",
-  baseline_executed: "Baseline scheme executed for real",
+  // Investigation fix (third instance of the "narration reads stale
+  // history-based value instead of real forced baseline" bug — same root
+  // cause as the Adaptation-text and Recommendation-panel fixes, and
+  // already correctly disclaimed on the static card's
+  // HistoryBasedBaselinePreview — see DeviceStoryCard.tsx). This value
+  // (backend's baseline_winner) is the deterministic scorer's OWN
+  // pre-attack instinct, computed before comparison_result even exists —
+  // it is never the real, forced baseline (comparison_result.scheme_a)
+  // used throughout the actual before/after assessment. Labeled
+  // "informational only" so it can't be misread as what was actually
+  // executed, matching the static card's wording exactly.
+  baseline_previewed: "Agent's history-based instinct computed (informational only)",
+  baseline_executed: "Agent's instinct scheme executed for real (informational only — not the assessment baseline)",
   awaiting_attack_selection: "Waiting for you to pick this device's attack scenario",
   attack_selected: "Attack scenario selected",
   attack_registered: "Real attack registration recorded",
