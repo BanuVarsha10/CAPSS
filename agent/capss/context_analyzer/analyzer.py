@@ -23,6 +23,41 @@ DEFAULT_CONFIG = {
     "registration_type_weights": {"initial": 0.6, "mobility": 0.5, "periodic": 0.3, "emergency": 0.95},
 }
 
+# Ablation study feature — additive only, default (ablation_mode=None)
+# leaves every existing code path provably unchanged (see analyze()'s
+# docstring). Neutralizes the RAW INPUT FIELDS a signal carries, not any
+# derivation logic — every _compute_*/_derive_* method below is called
+# exactly as before, unmodified, just on a sanitized context copy when a
+# mode is active. This means real cross-cutting effects (e.g. Systems'
+# validation_results already feeding into metadata-leakage risk,
+# Privacy's privacy_risk_level already feeding into threat_level) are
+# automatically and correctly neutralized too, without hand-enumerating
+# every derived effect — the existing, already-verified None-handling in
+# each method does the rest.
+_NO_THREAT_NEUTRAL_FIELDS = {
+    # "As if no attack was detected" — every Systems Module + combined-
+    # threat field RegistrationContext carries (see that schema's own
+    # field groupings). request_classification="ALLOW" (not just None)
+    # because _derive_threat_level's BLOCK/TAG branches are matched by
+    # value, not by None-ness — ALLOW is that field's own real neutral
+    # value, same as a genuinely clean registration would have.
+    "request_classification": "ALLOW",
+    "attack_type": None,
+    "attack_severity": None,
+    "detection_confidence": None,
+    "validation_results": None,
+    "attack_result": None,
+    "threat_score": None,
+}
+_NO_PRIVACY_NEUTRAL_FIELDS = {
+    # "As if Privacy Module produced no signal" — every Privacy Module
+    # field RegistrationContext carries.
+    "privacy_score": None,
+    "privacy_risk_level": None,
+    "metadata_leakage": None,
+    "correlation_score": None,
+}
+
 
 class ContextAnalyzer:
     """Derives a RequirementProfile from a RegistrationContext.
@@ -40,44 +75,63 @@ class ContextAnalyzer:
         self,
         context: RegistrationContext,
         experiences: Optional[List[Experience]] = None,
+        ablation_mode: Optional[str] = None,
     ) -> RequirementProfile:
-        """Main analysis entry point."""
+        """Main analysis entry point.
+
+        ablation_mode: additive, default None — completely normal, current
+        behavior, provably a no-op for every existing caller (none of them
+        pass this parameter). "no_threat"/"no_privacy" build a sanitized
+        COPY of `context` (via Pydantic's model_copy — the real, original
+        `context` object passed in by the caller is never mutated) with
+        that signal's real raw input fields forced to neutral defaults,
+        then run the exact same, unmodified analysis below on that copy.
+        "no_experience" and any other value are a no-op here (that mode is
+        handled entirely in ReasoningEngine.reason() instead — see there).
+        """
         experiences = experiences or []
 
+        if ablation_mode == "no_threat":
+            effective_context = context.model_copy(update=_NO_THREAT_NEUTRAL_FIELDS)
+        elif ablation_mode == "no_privacy":
+            effective_context = context.model_copy(update=_NO_PRIVACY_NEUTRAL_FIELDS)
+        else:
+            effective_context = context
+
         # 1. Threat Level — combines Systems Module + Privacy Module + registration type
-        threat_level = self._derive_threat_level(context)
+        threat_level = self._derive_threat_level(effective_context)
 
         # 2. Privacy Requirement — context sensitivity score
-        privacy_req = self._compute_context_sensitivity(context)
+        privacy_req = self._compute_context_sensitivity(effective_context)
 
         # 3. Tracking Risk
-        tracking_risk = self._compute_tracking_risk(context, experiences)
+        tracking_risk = self._compute_tracking_risk(effective_context, experiences)
 
         # 4. Metadata Leakage Risk — from Privacy Module or inferred
-        metadata_risk = self._compute_metadata_leakage_risk(context)
+        metadata_risk = self._compute_metadata_leakage_risk(effective_context)
 
         # 5. Correlation Risk — from Privacy Module or inferred from history
-        correlation_risk = self._compute_correlation_risk(context, experiences)
+        correlation_risk = self._compute_correlation_risk(effective_context, experiences)
 
         # 6. Latency Requirement — from slice type
         latency_map = {"eMBB": "medium", "URLLC": "ultra_low", "mMTC": "high"}
-        latency_req = latency_map.get(context.slice_type, "medium")
+        latency_req = latency_map.get(effective_context.slice_type, "medium")
 
         # 7. Resource Profile — from slice type
         resource_map = {"eMBB": "powerful", "URLLC": "powerful", "mMTC": "constrained"}
-        resource_prof = resource_map.get(context.slice_type, "moderate")
+        resource_prof = resource_map.get(effective_context.slice_type, "moderate")
 
         # 8. Network Confidence — from Systems Module validation results
-        net_conf = self._compute_network_confidence(context)
+        net_conf = self._compute_network_confidence(effective_context)
 
         # 9. Context Completeness — fraction of available fields
-        completeness = self._compute_context_completeness(context)
+        completeness = self._compute_context_completeness(effective_context)
 
         # 10. Quantum Threat — currently always False (future extension)
         quantum = False
 
         # 11. Anonymous Auth — required for enterprise/emergency contexts
-        anon_auth = context.dnn == "enterprise" or context.registration_type == "emergency"
+        anon_auth = effective_context.dnn == "enterprise" or effective_context.registration_type == "emergency"
 
         # 12. Identity Protection — always required in 5G context
         identity_required = True
@@ -95,7 +149,7 @@ class ContextAnalyzer:
             quantum_threat=quantum,
             anonymous_auth_required=anon_auth,
             identity_protection_required=identity_required,
-            attack_type=context.attack_type,
+            attack_type=effective_context.attack_type,
         )
 
     # ------------------------------------------------------------------

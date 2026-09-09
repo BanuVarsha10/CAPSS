@@ -8,6 +8,24 @@ def _clamp(val: float, min_val: float = 0.0, max_val: float = 1.0) -> float:
     return max(min_val, min(max_val, val))
 
 
+# Maximum allowed deviation of Experience Alignment Score (EAS) from its
+# neutral midpoint (0.5), in either direction. Confirmed directly: without
+# this bound, EAS can swing across its full [0.0, 1.0] range (i.e. up to
+# +-0.5 from neutral) as accumulated experience grows, and at a 20% weight
+# in compute_ors() this let a scheme's final_score margin over a rival
+# widen without limit purely from repeated history, even after the
+# knowledge-base-driven (SFS/PRI) component had already decided the
+# ranking on an empty store. Capping the swing keeps EAS able to
+# meaningfully nudge ranking -- including deciding close calls and cold-
+# start cross-UE retrieval -- without letting accumulated momentum alone
+# ever fully override the context/knowledge-base baseline. 0.15 keeps
+# EAS's maximum possible contribution to compute_ors() (0.15 * 0.20 = 0.03)
+# comfortably below SFS's typical influence, while still leaving a real,
+# non-trivial signal for the sign-test / adaptation behavior this project
+# already verifies elsewhere.
+EAS_MAX_DEVIATION_FROM_NEUTRAL = 0.15
+
+
 def _to_bool(val: Any) -> bool:
     if isinstance(val, bool):
         return val
@@ -169,13 +187,48 @@ class MetricsCalculator:
         """
         effective_experiences = list(experiences) if experiences else []
 
+        # Current query's attack_type, normalized once and reused below both
+        # for the cross-UE attack-type gate and the existing is_attack_active
+        # check. Unset/None is treated the same as the literal "none" label
+        # stored experiences use (RegistrationContext leaves attack_type None
+        # for a normal registration; Experience.context_snapshot stores the
+        # string "none" for the same case -- see experience_schema.py's
+        # ATTACK_MAP) so the two representations compare equal.
+        query_attack_type = (getattr(requirement_profile, 'attack_type', None) or 'none').strip().lower()
+
         # Only use cross-UE retrieval if same-UE experience count is below threshold (< 3)
         if len(effective_experiences) < 3 and cross_ue_experiences:
             for cross_exp, similarity in cross_ue_experiences:
+                # Cross-UE attack-type gate: a borrowed experience is only
+                # legitimate evidence for THIS scheme's alignment if it was
+                # stored under the SAME attack_type as the current query.
+                # Confirmed directly (diagnosis repro): retrieve_similar's
+                # embedding under-weights attack_type (1 of 13 dims, ordinal
+                # scalar) enough that e.g. duplicate_registration-stored GS
+                # experiences come back at 0.93-0.99 similarity against a
+                # genuine REPLAY query, letting GS (no documented replay
+                # affinity in the knowledge base) pick up a real, capped-but-
+                # nonzero EAS boost purely from an unrelated attack type.
+                # Excluded entirely rather than discounted: the knowledge
+                # base's attack_type_affinity table is already the
+                # authoritative source for "is this scheme's use under this
+                # attack type justified" (Check 4 uses it the same way) --
+                # borrowed evidence from a DIFFERENT attack type isn't a
+                # weaker version of a legitimate signal about the current
+                # decision, it isn't evidence about it at all, so it gets
+                # zero weight here rather than a same-but-smaller one. This
+                # is a different kind of discount from the existing
+                # `* 0.5 * similarity` recency/confidence decay below, which
+                # legitimately still applies to SAME-attack-type matches.
+                exp_context = getattr(cross_exp, 'context_snapshot', {}) or {}
+                exp_attack_type = str(exp_context.get('attack_type', 'none') or 'none').strip().lower()
+                if exp_attack_type != query_attack_type:
+                    continue
+
                 original_decay = getattr(cross_exp, 'experience_decay_factor', 1.0)
                 cross_exp_copy = Experience(
                     ue_id=getattr(cross_exp, 'ue_id', 'cross_ue'),
-                    context_snapshot=getattr(cross_exp, 'context_snapshot', {}),
+                    context_snapshot=exp_context,
                     requirement_profile=getattr(cross_exp, 'requirement_profile', {}),
                     selected_scheme=getattr(cross_exp, 'selected_scheme', ''),
                     selected_scheme_id=getattr(cross_exp, 'selected_scheme_id', ''),
@@ -191,26 +244,49 @@ class MetricsCalculator:
         if not effective_experiences:
             return 0.5
 
+        # Same attack-type relevance gate Bug 2 established for cross-UE
+        # data, now extended to OWN-UE data too. Cross-UE entries in
+        # effective_experiences already only got there by passing this
+        # exact check at insertion above (Bug 2's merge-loop gate) --
+        # re-checking them here is a redundant no-op, not a behavior
+        # change. What this newly excludes is OWN-UE experiences: found
+        # during the Bug 4 investigation that a device's own history had
+        # NO attack-type gating at all (matching_experiences filtered
+        # purely by selected_scheme_id) -- a real device with 6 own
+        # duplicate_registration/none experiences (all selecting GS) still
+        # got a real, measured EAS boost (0.5864) toward GS on a REPLAY
+        # query, where GS has no documented affinity, purely from
+        # unrelated own history. Filtered here (before matching AND before
+        # the total_weight denominator) rather than only in the matching
+        # step, so an irrelevant own experience doesn't even dilute other
+        # schemes' ratios -- consistent with how Bug 2's cross-UE
+        # experiences never entered effective_experiences at all when
+        # mismatched, not just excluded from matching.
+        relevant_experiences = [
+            exp for exp in effective_experiences
+            if str((getattr(exp, 'context_snapshot', {}) or {}).get('attack_type', 'none') or 'none')
+            .strip().lower() == query_attack_type
+        ]
+
         # Check if active attack/high threat is present (dampens historical bias)
         is_attack_active = False
         if requirement_profile:
             threat = getattr(requirement_profile, 'threat_level', 'low')
-            att_type = (getattr(requirement_profile, 'attack_type', None) or '').strip().lower()
-            if threat in ['high', 'critical'] or (att_type and att_type not in ['none', 'null']):
+            if threat in ['high', 'critical'] or query_attack_type not in ['none', 'null']:
                 is_attack_active = True
 
         matching_experiences = []
-        for exp in effective_experiences:
+        for exp in relevant_experiences:
             exp_scheme_id = getattr(exp, 'selected_scheme_id', None)
             exp_scheme_name = getattr(exp, 'selected_scheme', None)
-            
+
             if exp_scheme_id == getattr(scheme, 'id', None) or exp_scheme_name == getattr(scheme, 'short_name', None):
                 matching_experiences.append(exp)
 
         if not matching_experiences:
             return 0.5
 
-        total_weight = sum(getattr(exp, 'experience_decay_factor', 1.0) for exp in effective_experiences)
+        total_weight = sum(getattr(exp, 'experience_decay_factor', 1.0) for exp in relevant_experiences)
         if total_weight <= 0:
             return 0.5
 
@@ -262,7 +338,11 @@ class MetricsCalculator:
             # Shift towards neutral 0.5 so threat adaptation takes priority over historical bias
             res = 0.5 * res + 0.5 * 0.5
 
-        return _clamp(res)
+        # Bound EAS's swing from neutral (see EAS_MAX_DEVIATION_FROM_NEUTRAL's
+        # docstring) -- experience can still meaningfully nudge the ranking,
+        # but can never fully overwhelm the knowledge-base-driven baseline
+        # no matter how much history accumulates.
+        return _clamp(res, 0.5 - EAS_MAX_DEVIATION_FROM_NEUTRAL, 0.5 + EAS_MAX_DEVIATION_FROM_NEUTRAL)
 
     def compute_hbs(self, scheme1: PrivacyScheme, scheme2: PrivacyScheme, requirement_profile: RequirementProfile) -> float:
         """

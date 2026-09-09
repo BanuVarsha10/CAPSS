@@ -67,13 +67,29 @@ class ReasoningEngine:
         context: RegistrationContext,
         requirement_profile: RequirementProfile,
         experiences: List[Experience],
+        ablation_mode: Optional[str] = None,
     ) -> Recommendation:
-        """Run the full reasoning pipeline and return a Recommendation."""
+        """Run the full reasoning pipeline and return a Recommendation.
+
+        ablation_mode: additive, default None — completely normal, current
+        behavior, provably a no-op for every existing caller (none of them
+        pass this parameter). "no_experience" treats this UE's real local
+        history as empty and skips cross-UE RAG retrieval entirely for
+        this pass only — every scheme falls through to
+        MetricsCalculator.compute_eas()'s own existing, unmodified "no
+        history" default (0.5), exactly as a genuine first-ever
+        registration would. "no_threat"/"no_privacy" (handled entirely in
+        ContextAnalyzer.analyze() — see there) still flow through here
+        unchanged via `requirement_profile`; this parameter only exists
+        here for the "no_experience" case and for parity/clarity with
+        every other real call site using the same real ablation_mode
+        value throughout a pass."""
         start = time.perf_counter()
+        effective_experiences = [] if ablation_mode == "no_experience" else experiences
 
         # 1. Cross-UE retrieval if per-UE experience count is below threshold (< 3)
         cross_ue_matches = None
-        if len(experiences) < 3 and self.retriever is not None:
+        if len(effective_experiences) < 3 and self.retriever is not None and ablation_mode != "no_experience":
             cross_ue_matches = self.retriever.retrieve_similar(
                 requirement_profile=requirement_profile,
                 context=context,
@@ -86,7 +102,7 @@ class ReasoningEngine:
 
         # 3. Score all schemes (passing optional cross-UE experiences)
         all_scores = self.scorer.score_all_schemes(
-            schemes, requirement_profile, experiences, cross_ue_experiences=cross_ue_matches,
+            schemes, requirement_profile, effective_experiences, cross_ue_experiences=cross_ue_matches,
         )
 
         # 3. Get top candidates (top 3)
@@ -129,7 +145,7 @@ class ReasoningEngine:
 
         # 7. Compute calibrated confidence
         hist_agreement = self._compute_historical_agreement(
-            experiences, winner.scheme_id, winner,
+            effective_experiences, winner.scheme_id, winner,
         )
         confidence = self.metrics.compute_confidence(
             context_completeness=requirement_profile.context_completeness,
@@ -143,8 +159,8 @@ class ReasoningEngine:
         previous_scheme: Optional[str] = None
         adaptation_reason_str: Optional[str] = None
 
-        if experiences:
-            latest = experiences[0]  # sorted desc by timestamp
+        if effective_experiences:
+            latest = effective_experiences[0]  # sorted desc by timestamp
             previous_scheme = latest.selected_scheme
             if previous_scheme != winner.short_name:
                 adaptation_delta = abs(winner.final_score - latest.decision_score)
@@ -162,7 +178,7 @@ class ReasoningEngine:
         explanation = self.explainer.generate_explanation(
             winner=winner,
             context=context,
-            experiences=experiences,
+            experiences=effective_experiences,
             all_scores=all_scores,
             requirement_profile=requirement_profile,
             knowledge_base_schemes=schemes,
@@ -202,7 +218,7 @@ class ReasoningEngine:
             rules_fired=explanation.get("rules_fired", []),
             context_influence=explanation.get("context_influence", {}),
             experience_contribution={
-                "total_experiences": len(experiences),
+                "total_experiences": len(effective_experiences),
                 "historical_agreement": hist_agreement,
             },
             knowledge_coverage=kb_coverage,

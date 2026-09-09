@@ -22,6 +22,37 @@ def _to_bool(val: Any) -> bool:
     return bool(val)
 
 
+# Bug 3 fix: dampens (does not zero out) the tracking/correlation-risk
+# dimensions' weight for a scheme whose knowledge-base attack_type_affinity
+# for the CURRENT attack_type is explicitly documented False. Confirmed
+# structural, not coincidental (see diagnosis): ContextAnalyzer hardcodes
+# tracking_risk += 0.35 for any replay/duplicate-classified context, and
+# correlation_risk structurally tends to be high for replay too (SUCI-reuse
+# is replay's defining signature) -- so a scheme with NO documented replay
+# affinity (e.g. GS) could still win purely on general tracking/correlation
+# fit, overriding the KB's own explicit "not suited for this attack"
+# signal. 0.35 keeps this a dampening rather than a veto: high_tracking_risk
+# (weight 2.0) + high_correlation_risk (weight 2.0) + the tracking_risk
+# context preference (weight 1.3) together drop from 5.3 to ~1.86 of
+# combined weight for the mismatched scheme specifically -- still a real,
+# nonzero contribution a scheme could win on if strong enough elsewhere
+# (see verification: a False-affinity scheme with an overwhelming
+# unrelated-dimension advantage still wins), just no longer enough on its
+# own to outweigh attack_type_affinity's single 2.0-weighted dimension the
+# way the undampened 5.3 could. Only applies when affinity is explicitly
+# False for THIS attack_type -- never for True affinity, and never when no
+# attack is active (attack_type is None/"none"), so duplicate_registration
+# (where the same tracking_risk rule fires but GS's affinity is correctly
+# True) and normal registrations are both completely unaffected.
+ATTACK_MISMATCH_TRACKING_DAMPENING = 0.35
+
+# The 3 profile_matcher dimensions this dampening applies to -- every other
+# dimension (privacy, quantum, latency, identity protection, ...) is
+# untouched regardless of attack_type_affinity, which is what keeps this a
+# targeted dampening rather than a broader scheme-wide penalty.
+_TRACKING_CORRELATION_DIMENSIONS = frozenset({"high_tracking_risk", "high_correlation_risk", "tracking_risk"})
+
+
 class ProfileMatcher:
     """
     A matcher class that compares a requirement profile against a privacy scheme.
@@ -33,6 +64,20 @@ class ProfileMatcher:
         """
         reasoning_profile: Dict[str, Any] = scheme.get_reasoning_profile()
         context_prefs: Dict[str, bool] = scheme.get_context_preferences()
+
+        # Bug 3 fix: is THIS scheme's KB affinity for the CURRENT attack_type
+        # explicitly documented False (not just absent/None -- a real
+        # "this scheme is not suited for this attack" entry)?
+        attack_type_raw = (getattr(requirement_profile, 'attack_type', None) or '').strip().lower()
+        attack_type_key = 'duplicate_registration' if attack_type_raw in ('duplicate', 'duplicate_registration') else attack_type_raw
+        affinity_map = reasoning_profile.get('attack_type_affinity', {}) or {}
+        explicit_affinity = affinity_map.get(attack_type_key, None) if attack_type_key else None
+        affinity_documented_false = attack_type_key not in ('', 'none', 'null') and explicit_affinity is False
+
+        def _dampened_weight(name: str, weight: float) -> float:
+            if affinity_documented_false and name in _TRACKING_CORRELATION_DIMENSIONS:
+                return weight * ATTACK_MISMATCH_TRACKING_DAMPENING
+            return weight
 
         # Define dimensions and their evaluations
         # Format: (name, is_required, is_supported, weight)
@@ -62,13 +107,13 @@ class ProfileMatcher:
                 'high_tracking_risk',
                 requirement_profile.tracking_risk > 0.5,
                 _to_bool(reasoning_profile.get('high_tracking_risk', False)),
-                2.0
+                _dampened_weight('high_tracking_risk', 2.0)
             ),
             (
                 'high_correlation_risk',
                 requirement_profile.correlation_risk > 0.5,
                 _to_bool(reasoning_profile.get('high_correlation_risk', False)),
-                2.0
+                _dampened_weight('high_correlation_risk', 2.0)
             ),
             (
                 'low_latency_required',
@@ -106,7 +151,7 @@ class ProfileMatcher:
                 'tracking_risk',
                 requirement_profile.tracking_risk > 0.5,
                 _to_bool(context_prefs.get('tracking_risk', False)),
-                1.3
+                _dampened_weight('tracking_risk', 1.3)
             ),
             (
                 'anonymous_authentication_required',
