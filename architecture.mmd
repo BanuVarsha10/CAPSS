@@ -1,0 +1,24 @@
+flowchart LR
+    UE["UE / UERANSIM"] --> P["Pre-AMF Security Layer"]
+    P --> P1["Header Validator"]
+    P --> P2["Parameter Validator"]
+    P --> P3["Subscriber Validator"]
+    P --> P4["Duplicate Detector"]
+    P --> P5["Registration Rate Detector"]
+    P --> C["Request Classifier"]
+    C --> C1["ALLOW"]
+    C --> C2["TAG"]
+    C --> C3["BLOCK"]
+    C --> A["CAPSS Decision Agent"]
+    H["Registration History
+Frequency
+Duplicate Behaviour
+Privacy Score
+Previous Policy"] --> A
+    R["RAG Knowledge Base
+7 Privacy Schemes"] --> A
+    A --> S["Privacy Recommendation"]
+    S --> M["AMF Authentication"]
+    M --> O["Open5GS / MongoDB"]
+    O --> D["Live Dashboard
+FastAPI + React/TypeScript"]
