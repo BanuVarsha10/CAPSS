@@ -1,4 +1,4 @@
-# 🛡️ CAPSS — Context-Aware Adaptive Privacy & Security System
+# CAPSS — Context-Aware Adaptive Privacy & Security System
 
 > **Adaptive privacy intelligence for real 5G subscriber registration.**
 
@@ -17,17 +17,17 @@ The current implementation combines:
 
 and exposes the same pipeline through a full-stack Live Mode dashboard connected to **Open5GS + UERANSIM + MongoDB**.
 
-## ✨ Core capabilities
+## Core capabilities
 
-- 🔐 Pre-AMF registration validation and suspicious-behaviour detection
-- 🧩 Request classification: **ALLOW / TAG / BLOCK**
-- 📊 Privacy-risk analysis covering metadata leakage and correlation/linkability
-- 🧠 Context-aware decision agent using registration history and RAG
-- 🔑 Knowledge base containing **7 privacy schemes / hybrid options**
-- 📡 Real Open5GS + UERANSIM registration flow
-- 🖥️ React + TypeScript dashboard backed by FastAPI
-- 🧪 Automated core and dashboard-backend testing
-- 📈 Ablation-study and real-hardware stress-test scripts
+-  Pre-AMF registration validation and suspicious-behaviour detection
+-  Request classification: **ALLOW / TAG / BLOCK**
+-  Privacy-risk analysis covering metadata leakage and correlation/linkability
+-  Context-aware decision agent using registration history and RAG
+-  Knowledge base containing **7 privacy schemes / hybrid options**
+-  Real Open5GS + UERANSIM registration flow
+-  React + TypeScript dashboard backed by FastAPI
+-  Automated core and dashboard-backend testing
+-  Ablation-study and real-hardware stress-test scripts
 
 ## 🏗️ Architecture
 
